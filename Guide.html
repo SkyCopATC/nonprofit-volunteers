@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volunteer Coordination Hub — User Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#1B3A5C;--teal:#2A7B6F;--gold:#D4A017;--bg:#f0f4f8;--white:#fff;--border:#e2e8f0;--text:#1a1a2e;--muted:#64748b;--light:#f8fafc;--red:#c0392b;--green:#2d7a4f}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{background:var(--navy);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.topbar .mark{width:34px;height:34px;background:var(--teal);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px}
+.topbar .title{font-size:15px;font-weight:700;flex:1}
+.topbar .title span{font-size:11px;font-weight:400;color:rgba(255,255,255,.6);display:block;line-height:1.2}
+.topbar a{color:#fff;font-size:13px;padding:8px 14px;border:1px solid rgba(255,255,255,.25);border-radius:8px;font-weight:600;background:rgba(255,255,255,.06)}
+.topbar a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:grid;grid-template-columns:240px 1fr;max-width:1200px;margin:0 auto;gap:28px;padding:28px 24px 60px}
+.toc{position:sticky;top:78px;align-self:start;background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;max-height:calc(100vh - 100px);overflow-y:auto}
+.toc-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.toc a{display:block;padding:6px 10px;font-size:13px;color:var(--text);border-radius:6px;font-weight:500;margin-bottom:2px}
+.toc a:hover{background:var(--light);color:var(--navy);text-decoration:none}
+.toc a.active{background:rgba(42,123,111,.1);color:var(--teal);font-weight:600}
+.main{background:#fff;border:1px solid var(--border);border-radius:14px;padding:40px}
+.hero{background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;padding:32px;border-radius:14px;margin-bottom:28px}
+.hero h1{font-size:30px;font-weight:700;margin-bottom:8px}
+.hero p{font-size:15px;opacity:.92}
+h2{font-size:24px;color:var(--navy);margin:36px 0 12px;font-weight:700;scroll-margin-top:80px}
+h2:first-of-type{margin-top:0}
+h3{font-size:17px;color:var(--navy);margin:22px 0 8px;font-weight:700}
+p{margin-bottom:12px}
+ul,ol{margin:0 0 14px 22px}
+li{margin-bottom:6px}
+.callout{background:var(--light);border-left:4px solid var(--teal);padding:14px 18px;border-radius:8px;margin:14px 0;font-size:14px}
+.callout.warn{background:#fff7d6;border-color:var(--gold);color:#5c4400}
+code{background:var(--light);padding:1px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px;color:var(--navy);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border)}
+th{background:var(--light);color:var(--navy);font-weight:700}
+@media(max-width:900px){.layout{grid-template-columns:1fr;gap:14px;padding:18px 14px 40px}.toc{position:static;max-height:none;order:2}.main{padding:22px;order:1}.hero{padding:22px}.hero h1{font-size:22px}}
+</style></head><body>
+<div class="topbar"><div class="mark">B</div><div class="title">Build Your Club Academy<span>Volunteer Coordination Hub — User Guide</span></div><a href="/">← Back to App</a></div>
+<div class="layout">
+<aside class="toc">
+<div class="toc-title">In This Guide</div>
+<a href="#what">What is this tool?</a>
+<a href="#start">Getting started</a>
+<a href="#workflow">Volunteer lifecycle</a>
+<a href="#volunteers">Volunteer Directory</a>
+<a href="#applications">Applications</a>
+<a href="#groups">Group Volunteers</a>
+<a href="#opportunities">Opportunities</a>
+<a href="#shifts">Shifts & Schedule</a>
+<a href="#hours">Hours Log</a>
+<a href="#screening">Screening</a>
+<a href="#training">Training</a>
+<a href="#risk">Risk & Incidents</a>
+<a href="#comms">Communications</a>
+<a href="#recognition">Recognition</a>
+<a href="#reports">Reports</a>
+<a href="#build">Build Annual Report</a>
+<a href="#legal">Legal & insurance notes</a>
+<a href="#disclaimer">Disclaimer</a>
+</aside>
+<article class="main">
+<div class="hero"><h1>Volunteer Coordination Hub</h1><p>Manage volunteers from application through long-tenure retention. Sign-ups, shifts, hours, screening, training, risk, communications, recognition — and a polished annual report at the end.</p></div>
+
+<h2 id="what">What is this tool?</h2>
+<p>A working volunteer coordination platform for nonprofits with 5–500 active volunteers. It handles every step of the volunteer relationship from the moment someone fills out an interest form to the day they receive a thousand-hour award.</p>
+
+<h2 id="start">Getting started</h2>
+<ol>
+<li>Sign up or sign in. Demo: <code>demo@example.org</code> / <code>demo</code> — fully populated with 4 volunteers, 3 opportunities, 55 logged hours, screenings, trainings, and a sample group engagement.</li>
+<li>Enter your organization's name during onboarding.</li>
+<li>The Dashboard surfaces upcoming shifts, expiring screenings, and applications awaiting review.</li>
+</ol>
+
+<h2 id="workflow">The volunteer lifecycle</h2>
+<p>The natural flow through the tool:</p>
+<ol>
+<li><b>Application</b> — prospect fills out interest form → captured in Applications</li>
+<li><b>Screening</b> — request background check; track until cleared</li>
+<li><b>Orientation/training</b> — log completion of required trainings</li>
+<li><b>Roster</b> — convert application to active Volunteer with full profile</li>
+<li><b>Match to opportunity</b> — find a fit in the Opportunities catalog</li>
+<li><b>Schedule</b> — sign volunteer up for specific Shifts</li>
+<li><b>Log hours</b> — record actual time served</li>
+<li><b>Communicate</b> — reminders, check-ins, broadcast updates</li>
+<li><b>Recognize</b> — celebrate milestones, anniversaries, exceptional service</li>
+<li><b>Renew</b> — annual screening refresh, training updates</li>
+<li><b>Report</b> — totals to the board, funders, annual report</li>
+</ol>
+
+<h2 id="volunteers">Volunteer Directory</h2>
+<p>The roster of everyone who serves your organization. Each profile captures contact info, emergency contact, skills, availability, interests, start date, status (Active, Pending Screening, Needs Orientation, Inactive, Archived), and notes. Lifetime hours and progress toward the next milestone are computed automatically from the Hours Log.</p>
+
+<h2 id="applications">Applications</h2>
+<p>The sign-up pipeline. Each application captures the prospect's contact info, interests, availability, who referred them, and current status (received, interviewing, accepted, declined, withdrawn). When you're ready to bring them on, click <b>Accept →</b> to convert the application into a full Volunteer profile.</p>
+
+<h2 id="groups">Group Volunteers</h2>
+<p>Track group engagements separately from individual volunteers — corporate day-of-service, school groups, religious organizations, family days. Each group records the sponsor contact, date, project, group size, hours each person served, and total aggregate hours. Group hours count toward your organization-wide totals in the Reports and Build Annual Report pages.</p>
+
+<h2 id="opportunities">Opportunities</h2>
+<p>Your catalog of ongoing volunteer roles. Each entry describes the role, who leads it, time commitment, requirements (background check, training), and skills needed. Mark roles as Active or Inactive. Shifts reference opportunities so reporting can roll up by program.</p>
+
+<h2 id="shifts">Shifts & Schedule</h2>
+<p>Specific time slots tied to opportunities. Each shift has a date, start/end time, location, spots needed, and per-volunteer sign-up checkboxes. The Dashboard surfaces upcoming shifts and indicates which are understaffed (red badge if fewer than half filled).</p>
+
+<h2 id="hours">Hours Log</h2>
+<p>Every volunteer-hour entry. Captures volunteer, opportunity, date, hours, and notes. Hours automatically roll up into the volunteer's lifetime total, drive milestone calculations, and feed the Reports and Annual Volunteer Report.</p>
+
+<h2 id="screening">Screening & Background Checks</h2>
+<p>Track every screening request, completion, and expiration. Status flow: <b>Not Required → Requested → In Progress → Cleared → Expired</b>. Common screening types: Criminal Background Check, Driving Record, Sex Offender Registry, Reference Check, Drug Test, Child Abuse Registry.</p>
+<div class="callout warn"><b>This is your biggest liability exposure.</b> Required for any role involving children, elderly, money handling, or driving on behalf of the org. Funder and insurance compliance depends on contemporaneous records. The Dashboard warns when screenings expire within 90 days.</div>
+
+<h2 id="training">Training & Certifications</h2>
+<p>Every training course or certification a volunteer completes. Captures volunteer, training type, completion date, expiration date, and certificate link. Required for orgs serving vulnerable populations (mandated reporter, safe environment training) and for specialty roles (CPR/First Aid, driver training).</p>
+
+<h2 id="risk">Risk & Incident Tracking</h2>
+<p>Log every incident — injuries, near-misses, complaints, property damage. Each entry captures date, severity (Low / Medium / High / Critical), volunteer involved, reporter, description, actions taken, and resolution status.</p>
+<div class="callout warn"><b>Document contemporaneously.</b> Memory fades. Insurance claims and lawsuits hinge on what was recorded at the time. Even minor incidents matter for pattern detection and protecting the organization.</div>
+
+<h2 id="comms">Communications</h2>
+<p>Two parts:</p>
+<ul>
+<li><b>Templates</b> — reusable message templates for common scenarios (welcome, shift reminder, milestone recognition). The demo seeds three useful starters.</li>
+<li><b>Log</b> — record every communication sent (newsletter, broadcast email, individual outreach). Captures date, channel, recipients, subject/summary, sender. Useful for audit trail and for tracking when you last reached different groups.</li>
+</ul>
+
+<h2 id="recognition">Recognition</h2>
+<p>The retention engine. Milestones unlock automatically based on logged hours:</p>
+<table>
+<tr><th>Milestone</th><th>Hours</th></tr>
+<tr><td>🌱 First Steps</td><td>10</td></tr>
+<tr><td>🌿 Getting Started</td><td>25</td></tr>
+<tr><td>⭐ Half-Century</td><td>50</td></tr>
+<tr><td>💯 Century Club</td><td>100</td></tr>
+<tr><td>🌟 Quarter-Thousand</td><td>250</td></tr>
+<tr><td>🏆 Half-Thousand</td><td>500</td></tr>
+<tr><td>👑 Thousand-Hour Hero</td><td>1,000</td></tr>
+<tr><td>💎 Founder's Circle</td><td>2,500</td></tr>
+</table>
+<p>Log recognition entries (Milestone, Spotlight, Annual Award, Anniversary, Special Thanks) to record when and how you celebrated each volunteer. Mark "Public Spotlight" if it'll be featured in social media or newsletter.</p>
+
+<h2 id="reports">Reports</h2>
+<p>Live computed reports for grants, board, and annual reporting:</p>
+<ul>
+<li>Total individual hours, group hours, combined total</li>
+<li>Active volunteer count vs. full roster</li>
+<li>Hours by opportunity (horizontal bar chart)</li>
+<li>Top 10 volunteers by lifetime hours with milestones earned</li>
+</ul>
+
+<h2 id="build">Build Annual Volunteer Report</h2>
+<p>Generates a polished, board-ready volunteer report. Includes:</p>
+<ul>
+<li>By-the-numbers KPI dashboard (total hours, active volunteers, group engagements, estimated value)</li>
+<li>Hours-by-program breakdown</li>
+<li>Volunteers at milestone tier with milestones earned</li>
+<li>Group engagement summary</li>
+</ul>
+<p>Estimated value of volunteer time is calculated at <b>$33.49/hour</b> (Independent Sector national average — funders accept this rate for representing volunteer contribution in financial terms).</p>
+<p>Three outputs: HTML preview (print-ready), .html download, and .docx download (Word format).</p>
+
+<h2 id="legal">Legal & insurance notes</h2>
+<p>A few things this tool helps you stay on top of but doesn't replace professional guidance for:</p>
+<ul>
+<li><b>D&O / Volunteer liability insurance</b> — ensure your policy actually names volunteers. Many small nonprofits assume coverage they don't have.</li>
+<li><b>Waivers/releases</b> — collect signed waivers from every volunteer before first service. State law varies on enforceability — have counsel review your template.</li>
+<li><b>Driver coverage</b> — if volunteers drive on behalf of the org, you need either non-owned auto coverage on your policy OR a clear policy that volunteers' personal insurance is primary.</li>
+<li><b>Mandated reporter status</b> — depending on your state and program, some volunteers may be legally required to report suspected abuse. Train them and document the training.</li>
+<li><b>Background check policies</b> — federal/state laws govern what you can ask, how long records can be considered, and how decisions must be made. Use a reputable screening vendor and follow their guidance.</li>
+</ul>
+
+<h2 id="disclaimer">Disclaimer</h2>
+<p>This tool helps you organize and track volunteer management activities. It does not constitute legal, HR, insurance, or risk-management advice. Have appropriate counsel review your specific procedures before implementation.</p>
+
+<p style="margin-top:32px;padding-top:18px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)">Build Your Club Academy · Volunteer Coordination Hub User Guide</p>
+</article>
+</div>
+
+<script>
+const sections = document.querySelectorAll('h2[id]');
+const links = document.querySelectorAll('.toc a');
+const linkByHash = {}; links.forEach(l => { linkByHash['#'+l.getAttribute('href').slice(1)] = l; });
+function onScroll(){ let active = null; const top = 100; sections.forEach(s => { if (s.getBoundingClientRect().top <= top) active = s.id; }); links.forEach(l => l.classList.remove('active')); if (active && linkByHash['#'+active]) linkByHash['#'+active].classList.add('active'); }
+window.addEventListener('scroll', onScroll, { passive:true }); onScroll();
+</script>
+</body></html>

@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Club — Volunteer Coordination Hub</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a2e;font-size:14px;-webkit-font-smoothing:antialiased}
+:root{--navy:#1B3A5C;--teal:#2A7B6F;--gold:#D4A017;--red:#c0392b;--green:#2d7a4f;--bg:#f0f4f8;--white:#fff;--border:#e2e8f0;--text:#1a1a2e;--muted:#64748b;--light:#f8fafc}
+.hidden{display:none!important}
+
+/* ── AUTH SCREENS ── */
+.auth-wrap{min-height:100vh;background:linear-gradient(135deg,var(--navy),var(--teal));display:flex;align-items:center;justify-content:center;padding:24px}
+.auth-card{background:var(--white);border-radius:24px;padding:40px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.auth-logo{width:48px;height:48px;background:var(--navy);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:700;margin:0 auto 20px}
+.auth-title{font-size:24px;font-weight:700;color:var(--navy);text-align:center;margin-bottom:6px}
+.auth-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px}
+.auth-tabs{display:flex;background:var(--light);border-radius:10px;padding:4px;margin-bottom:20px}
+.auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;border-radius:8px;color:var(--muted);transition:.15s}
+.auth-tab.active{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--text);background:#fff;font-family:inherit;transition:.15s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--teal)}
+.field textarea{resize:vertical;min-height:80px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.2s;white-space:nowrap;font-family:inherit}
+.btn-primary{background:var(--navy);color:#fff;width:100%}
+.btn-primary:hover{background:#264a73}
+.btn-ghost{background:transparent;color:var(--navy)}
+.btn-ghost:hover{background:var(--light)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#236b60}
+.btn-outline{background:#fff;color:var(--navy);border:1.5px solid var(--border)}
+.btn-outline:hover{border-color:var(--navy)}
+.auth-foot{text-align:center;margin-top:18px;font-size:13px;color:var(--muted)}
+.auth-foot a{color:var(--navy);font-weight:600;cursor:pointer}
+
+/* ── ONBOARDING ── */
+.ob-wrap{min-height:100vh;background:linear-gradient(135deg,var(--navy),var(--teal));display:flex;align-items:center;justify-content:center;padding:24px}
+.ob-card{background:var(--white);border-radius:24px;width:100%;max-width:680px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.ob-progress{display:flex;background:var(--light);height:4px}
+.ob-progress span{flex:1;background:var(--border);transition:.3s}
+.ob-progress span.done{background:var(--teal)}
+.ob-body{padding:40px}
+.ob-step{font-size:12px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.ob-title{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.ob-desc{font-size:14px;color:var(--muted);margin-bottom:24px}
+.ob-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px}
+.ob-pick{padding:14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;text-align:center;transition:.15s;background:#fff}
+.ob-pick:hover{border-color:var(--teal)}
+.ob-pick.selected{border-color:var(--teal);background:rgba(42,123,111,.06)}
+.ob-pick-title{font-size:13px;font-weight:600;color:var(--navy)}
+.ob-pick-desc{font-size:11px;color:var(--muted);margin-top:3px}
+.ob-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:10px}
+
+/* ── SIDEBAR ── */
+.sidebar{width:240px;background:var(--navy);min-height:100vh;display:flex;flex-direction:column;flex-shrink:0;position:fixed;left:0;top:0;bottom:0;z-index:10}
+.sidebar-logo{padding:20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.sidebar-logo .mark{width:34px;height:34px;background:var(--teal);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0}
+.sidebar-logo .text p{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.sidebar-logo .text span{font-size:11px;color:rgba(255,255,255,.4);line-height:1}
+.sidebar-org{padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-org .label{font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.sidebar-org .name{font-size:12px;color:rgba(255,255,255,.8);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-nav{flex:1;padding:10px 8px;display:flex;flex-direction:column;gap:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;color:rgba(255,255,255,.7);background:transparent;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;text-align:left;font-family:inherit;transition:.15s;width:100%}
+.nav-item:hover{background:rgba(255,255,255,.05);color:#fff}
+.nav-item.active{background:rgba(255,255,255,.08);color:#fff}
+.nav-item .icon{font-size:15px;width:18px;text-align:center}
+.sidebar-bottom{padding:12px;border-top:1px solid rgba(255,255,255,.08)}
+.user-row{display:flex;align-items:center;gap:10px;padding:6px}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.user-info{flex:1;min-width:0}
+.u-name{font-size:12px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.signout-btn{background:transparent;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:14px;padding:4px;font-family:inherit}
+.signout-btn:hover{color:#fff}
+.signout-btn-full{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.9);cursor:pointer;font-size:13px;font-weight:600;padding:10px 12px;border-radius:8px;font-family:inherit;margin-top:8px;transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.signout-btn-full:hover{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.25)}
+
+/* ── MAIN CONTENT ── */
+.main{margin-left:240px;flex:1;min-height:100vh}
+.page{padding:32px;max-width:1100px}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
+.page-title{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--muted)}
+
+/* ── CARDS / SECTIONS ── */
+.section{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px}
+.section-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.section-title .badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.badge-red{background:#fde8e6;color:var(--red)}
+.badge-amber{background:#fff4d6;color:#a86b00}
+.badge-green{background:#dcf5e7;color:var(--green)}
+.badge-grey{background:#eef2f7;color:var(--muted)}
+.badge-blue{background:#dbeafe;color:var(--navy)}
+
+/* Dashboard stat tiles */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
+.stat-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.stat-num{font-size:28px;font-weight:700;color:var(--navy);line-height:1}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.stat-card.alert{border-color:var(--red)}
+.stat-card.alert .stat-num{color:var(--red)}
+
+/* Deadline list rows */
+.dl-row{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:#fff;transition:.15s}
+.dl-row:hover{border-color:var(--teal)}
+.dl-row.overdue{border-left:3px solid var(--red)}
+.dl-row.soon{border-left:3px solid var(--gold)}
+.dl-row.upcoming{border-left:3px solid var(--teal)}
+.dl-row.done{opacity:.55}
+.dl-when{font-size:12px;font-weight:700;text-align:center;min-width:64px;padding:6px 8px;border-radius:8px;background:var(--light);color:var(--navy)}
+.dl-when.overdue{background:#fde8e6;color:var(--red)}
+.dl-when.soon{background:#fff4d6;color:#a86b00}
+.dl-info{flex:1;min-width:0}
+.dl-name{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.dl-meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dl-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;white-space:nowrap}
+.dl-status select{background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:inherit}
+
+/* Calendar */
+.cal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.cal-grid{grid-template-columns:repeat(2,1fr)}}
+.cal-month{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px}
+.cal-month-name{font-size:13px;font-weight:700;color:var(--navy);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.cal-event{font-size:12px;padding:6px 0;color:var(--text);border-bottom:1px dashed var(--border)}
+.cal-event:last-child{border:none}
+.cal-event .day{font-weight:700;color:var(--navy);margin-right:6px;font-size:11px}
+.cal-event .ev-empty{color:var(--muted);font-style:italic}
+
+/* Filing detail modal-like view */
+.filing-detail{padding:18px;background:var(--light);border-radius:10px;margin-top:10px;font-size:13px;color:var(--text);line-height:1.6;display:none}
+.filing-detail.show{display:block}
+.filing-detail h4{font-size:13px;color:var(--navy);font-weight:700;margin:10px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+.filing-detail h4:first-child{margin-top:0}
+.filing-detail a{color:var(--teal);font-weight:600}
+
+/* Documents */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.doc-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:6px}
+.doc-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.doc-icon{font-size:22px;margin-bottom:4px}
+.doc-name{font-size:14px;font-weight:700;color:var(--navy)}
+.doc-desc{font-size:12px;color:var(--muted);line-height:1.4;flex:1}
+.doc-meta{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* Doc generator form */
+.gen-form{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.gen-output{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;font-family:Georgia,serif;line-height:1.6;color:var(--text);min-height:200px;white-space:pre-wrap;font-size:14px}
+.gen-output.placeholder{color:var(--muted);font-style:italic;font-family:inherit;font-size:13px;display:flex;align-items:center;justify-content:center;text-align:center}
+.gen-toolbar{display:flex;gap:8px;justify-content:flex-end;margin-bottom:12px;flex-wrap:wrap}
+
+/* Education */
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.edu-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:.15s}
+.edu-card:hover{border-color:var(--teal);transform:translateY(-2px)}
+.edu-tag{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.edu-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.edu-snip{font-size:12px;color:var(--muted);line-height:1.4}
+.edu-article{background:#fff;border:1px solid var(--border);border-radius:14px;padding:32px;line-height:1.7;color:var(--text);font-size:14px}
+.edu-article h2{font-size:22px;color:var(--navy);margin-bottom:8px}
+.edu-article h3{font-size:15px;color:var(--navy);margin:18px 0 6px}
+.edu-article p{margin-bottom:12px}
+.edu-article ul{margin-left:22px;margin-bottom:12px}
+.edu-article li{margin-bottom:4px}
+.edu-back{background:transparent;border:none;color:var(--teal);font-weight:600;cursor:pointer;font-size:13px;padding:0;margin-bottom:16px;font-family:inherit}
+
+/* Settings */
+.settings-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border:none}
+.settings-label{font-size:13px;font-weight:600;color:var(--text)}
+.settings-value{font-size:13px;color:var(--muted)}
+
+/* ── MOBILE SIDEBAR TOGGLE ── */
+.mobile-toggle{display:none;position:fixed;top:12px;left:12px;z-index:30;background:var(--navy);color:#fff;border:none;border-radius:8px;width:42px;height:42px;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);align-items:center;justify-content:center;padding:0}
+.sidebar-close{display:none;position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:none;color:#fff;width:34px;height:34px;font-size:20px;line-height:1;cursor:pointer;padding:0;border-radius:8px;z-index:5;align-items:center;justify-content:center}
+.sidebar-close:hover{background:rgba(255,255,255,.18)}
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9}
+.sidebar-backdrop.show{display:block}
+@media(max-width:768px){
+  .mobile-toggle{display:flex}
+  .sidebar-close{display:flex}
+  .sidebar{transform:translateX(-100%);transition:transform .25s ease;width:260px;box-shadow:0 0 24px rgba(0,0,0,.25)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .page{padding:64px 16px 24px}
+}
+
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}
+.modal-box{background:#fff;border-radius:20px;padding:32px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow:auto}
+.modal-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.modal-close{background:transparent;border:none;color:var(--muted);font-size:22px;cursor:pointer;float:right;line-height:1;padding:0}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+
+/* Pro badge in sidebar */
+.pro-badge{background:linear-gradient(135deg,var(--gold),#b58814);border-radius:10px;padding:10px 12px;cursor:pointer;margin-bottom:10px;transition:.15s}
+.pro-badge:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(212,160,23,.3)}
+.pro-badge.is-pro{background:linear-gradient(135deg,var(--teal),#236b60);cursor:default}
+.pro-badge.is-pro:hover{transform:none;box-shadow:none}
+.badge-label{font-size:12px;font-weight:700;color:#fff;line-height:1.2}
+.badge-sub{font-size:10px;color:rgba(255,255,255,.85);margin-top:2px}
+
+/* Team page */
+.team-code-display{background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;padding:24px;border-radius:14px;text-align:center;margin-bottom:20px}
+.team-code-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.8;margin-bottom:8px}
+.team-code-value{font-size:34px;font-weight:700;letter-spacing:.12em;font-family:'Courier New',monospace;margin-bottom:10px}
+.team-member-row{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:#fff}
+.team-member-info{flex:1;min-width:0}
+.team-member-name{font-size:13px;font-weight:600;color:var(--navy)}
+.team-member-email{font-size:11px;color:var(--muted)}
+.role-pill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.04em}
+.role-leader{background:#dbeafe;color:var(--navy)}
+.role-member{background:#eef2f7;color:var(--muted)}
+
+/* History */
+.hist-row{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:6px;background:#fff;font-size:13px}
+.hist-when{font-size:11px;color:var(--muted);min-width:120px;white-space:nowrap}
+.hist-who{font-size:12px;font-weight:600;color:var(--navy);min-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-what{flex:1;color:var(--text)}
+.hist-status-chip{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;text-transform:uppercase;letter-spacing:.04em;display:inline-block}
+
+/* Analytics */
+.score-card{background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;padding:24px;border-radius:16px;margin-bottom:20px;text-align:center}
+.score-num{font-size:54px;font-weight:700;line-height:1}
+.score-label{font-size:13px;opacity:.85;margin-top:4px}
+.bar-chart{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:10px;font-size:13px}
+.bar-label{min-width:140px;color:var(--text);font-weight:600}
+.bar-track{flex:1;background:var(--light);border-radius:6px;height:22px;position:relative;overflow:hidden}
+.bar-fill{height:100%;background:var(--teal);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:24px}
+.bar-meta{font-size:11px;color:var(--muted);min-width:60px;text-align:right}
+
+/* Admin */
+.admin-team{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:#fff;cursor:pointer;transition:.15s}
+.admin-team:hover{border-color:var(--teal);transform:translateY(-1px)}
+.admin-team-info{flex:1}
+.admin-team-name{font-size:14px;font-weight:700;color:var(--navy)}
+.admin-team-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.admin-banner{background:linear-gradient(135deg,var(--gold),#b58814);color:#fff;padding:14px 18px;border-radius:12px;margin-bottom:20px;font-size:13px}
+.admin-banner b{font-weight:700}
+
+/* Top-right sign-out (visible on every app page) */
+.btn-red{background:var(--red);color:#fff;border:none}
+.btn-red:hover{background:#9c2d22}
+.topbar-back{position:fixed;top:16px;left:262px;background:#fff;border:1px solid var(--border);color:var(--navy);font-size:12px;font-weight:600;padding:8px 14px;border-radius:8px;cursor:pointer;z-index:20;font-family:inherit;transition:.15s;display:none;align-items:center;gap:5px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.topbar-back:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+@media(max-width:768px){
+  .topbar-back{top:14px;left:64px;font-size:11px;padding:7px 11px}
+}
+.topbar-signout{position:fixed;top:16px;right:20px;background:#fff;border:1px solid var(--border);color:var(--navy);font-size:12px;font-weight:600;padding:8px 14px;border-radius:8px;cursor:pointer;z-index:20;font-family:inherit;transition:.15s;display:flex;align-items:center;gap:5px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.topbar-signout:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+@media(max-width:768px){
+  .topbar-signout{top:14px;right:14px;font-size:11px;padding:7px 11px}
+}
+
+/* Misc */
+.empty-state{padding:40px;text-align:center;color:var(--muted);font-size:13px}
+.disclaimer{background:#fff7d6;border:1px solid #f5d77f;border-radius:10px;padding:12px;font-size:12px;color:#5c4400;margin-bottom:20px;line-height:1.5}
+.disclaimer b{color:#3d2d00}
+</style>
+</head>
+<body>
+
+<!-- ════════════ AUTH ════════════ -->
+<div id="screen-auth" class="auth-wrap hidden">
+  <div class="auth-card">
+    <div class="auth-logo">B</div>
+    <h1 class="auth-title">Build Your Club</h1>
+    <p class="auth-sub">Volunteer Coordination</p>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</div>
+      <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Create Account</div>
+    </div>
+    <div id="form-signin">
+      <div class="field"><label>Email</label><input type="email" id="si-email" placeholder="you@nonprofit.org"></div>
+      <div class="field"><label>Password</label><input type="password" id="si-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+      <button class="btn btn-primary" onclick="doSignIn()">Sign In</button>
+      <p class="auth-foot">Demo account: <b>demo@example.org</b> / <b>demo</b></p>
+    </div>
+    <div id="form-signup" class="hidden">
+      <div class="field"><label>Your Name</label><input type="text" id="su-name" placeholder="Pat Lee"></div>
+      <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="you@nonprofit.org"></div>
+      <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doSignUp()"></div>
+      <button class="btn btn-primary" onclick="doSignUp()">Create Account →</button>
+      <p class="auth-foot">By creating an account you agree this is a demo and no real data is stored remotely.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ ONBOARDING ════════════ -->
+<div id="screen-onboard" class="ob-wrap hidden">
+  <div class="ob-card">
+    <div class="ob-body">
+      <div class="ob-step">Quick setup</div>
+      <h2 class="ob-title">What's your organization called?</h2>
+      <p class="ob-desc">We'll use this on your marketing materials and plan.</p>
+      <div class="field"><label>Organization Legal Name</label><input type="text" id="ob-orgname" placeholder="Build Your Club Foundation" onkeydown="if(event.key==='Enter')finishOnboarding()"></div>
+      <div class="ob-nav">
+        <button class="btn btn-ghost" onclick="signOut()">← Sign out</button>
+        <button class="btn btn-teal" onclick="finishOnboarding()">Finish setup →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ TEAM CHOICE (after sign-up) ════════════ -->
+<div id="screen-teamchoice" class="auth-wrap hidden">
+  <div class="auth-card">
+    <div class="auth-logo">B</div>
+    <h1 class="auth-title">Welcome aboard</h1>
+    <p class="auth-sub">Are you starting a new compliance tracker or joining a teammate?</p>
+    <button class="btn btn-primary" style="margin-bottom:10px" onclick="chooseTeamPath('new')">Start a new organization →</button>
+    <button class="btn btn-outline" style="width:100%;margin-bottom:14px" onclick="chooseTeamPath('join')">Join an existing team</button>
+    <div id="join-team-section" class="hidden">
+      <div class="field"><label>Team Code</label><input type="text" id="join-code" placeholder="e.g. ABC234" onkeydown="if(event.key==='Enter')joinTeamByCode()" style="text-transform:uppercase;letter-spacing:.1em;font-family:'Courier New',monospace"></div>
+      <button class="btn btn-teal" style="width:100%" onclick="joinTeamByCode()">Join Team →</button>
+    </div>
+    <p class="auth-foot" style="margin-top:18px"><a onclick="signOut()">← Sign out</a></p>
+  </div>
+</div>
+
+<!-- ════════════ MAIN APP ════════════ -->
+<div id="screen-app" class="hidden" style="display:flex">
+  <button class="mobile-toggle" type="button" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+  <button class="topbar-signout" type="button" onclick="signOut()" title="Sign out">↩ Sign Out</button>
+  <button class="topbar-back" id="back-to-dash" type="button" onclick="navigate('dashboard')" title="Back to dashboard">← Dashboard</button>
+  <div class="sidebar-backdrop" onclick="closeSidebar()"></div>
+  <aside class="sidebar">
+    <button class="sidebar-close" type="button" onclick="closeSidebar()" aria-label="Close menu">✕</button>
+    <div class="sidebar-logo">
+      <div class="mark">B</div>
+      <div class="text"><p>Build Your Club</p><span>Volunteers</span></div>
+    </div>
+    <div class="sidebar-org"><div class="label">Organization</div><div class="name" id="sb-org">—</div></div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard')"><span class="icon">⊞</span> Dashboard</button>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em;padding:10px 12px 4px">People</div>
+      <button class="nav-item" id="nav-volunteers" onclick="navigate('volunteers')"><span class="icon">👥</span> Volunteers</button>
+      <button class="nav-item" id="nav-applications" onclick="navigate('applications')"><span class="icon">📝</span> Applications</button>
+      <button class="nav-item" id="nav-groups" onclick="navigate('groups')"><span class="icon">🤝</span> Groups</button>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em;padding:10px 12px 4px">Work</div>
+      <button class="nav-item" id="nav-opportunities" onclick="navigate('opportunities')"><span class="icon">📋</span> Opportunities</button>
+      <button class="nav-item" id="nav-shifts" onclick="navigate('shifts')"><span class="icon">🗓️</span> Shifts</button>
+      <button class="nav-item" id="nav-hours" onclick="navigate('hours')"><span class="icon">⏱️</span> Hours Log</button>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em;padding:10px 12px 4px">Compliance</div>
+      <button class="nav-item" id="nav-screening" onclick="navigate('screening')"><span class="icon">🔍</span> Screening</button>
+      <button class="nav-item" id="nav-training" onclick="navigate('training')"><span class="icon">🎓</span> Training</button>
+      <button class="nav-item" id="nav-risk" onclick="navigate('risk')"><span class="icon">⚠️</span> Risk & Incidents</button>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em;padding:10px 12px 4px">Engagement</div>
+      <button class="nav-item" id="nav-comms" onclick="navigate('comms')"><span class="icon">💬</span> Communications</button>
+      <button class="nav-item" id="nav-recognition" onclick="navigate('recognition')"><span class="icon">🏆</span> Recognition</button>
+      <button class="nav-item" id="nav-reports" onclick="navigate('reports')"><span class="icon">📊</span> Reports</button>
+      <button class="nav-item" id="nav-build" onclick="navigate('build')"><span class="icon">📕</span> Build Annual Report</button>
+      <a class="nav-item" href="Guide.html" target="_blank" rel="noopener noreferrer" style="text-decoration:none"><span class="icon">📖</span> User Guide</a>
+      <button class="nav-item" id="nav-history" onclick="navigate('history')"><span class="icon">🕐</span> History</button>
+      <button class="nav-item" id="nav-analytics" onclick="navigate('analytics')"><span class="icon">📊</span> Analytics</button>
+      <button class="nav-item" id="nav-team" onclick="navigate('team')"><span class="icon">👥</span> Team</button>
+      <button class="nav-item" id="nav-settings" onclick="navigate('settings')"><span class="icon">⚙</span> Settings</button>
+      <button class="nav-item hidden" id="nav-admin" onclick="navigate('admin')"><span class="icon">🔐</span> Admin</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="pro-badge" id="pro-badge" onclick="openUpgradeModal()">
+        <div class="badge-label" id="pro-label">⚡ Upgrade to Pro</div>
+        <div class="badge-sub" id="pro-sub">$29/month · 14-day free trial</div>
+      </div>
+      <div class="user-row">
+        <div class="user-avatar" id="sb-avatar">?</div>
+        <div class="user-info"><div class="u-name" id="sb-uname">—</div></div>
+      </div>
+      <button class="signout-btn-full" onclick="signOut()" title="Sign out">↩ Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div id="page-dashboard" class="page"></div>
+    <div id="page-volunteers" class="page hidden"></div>
+    <div id="page-applications" class="page hidden"></div>
+    <div id="page-groups" class="page hidden"></div>
+    <div id="page-opportunities" class="page hidden"></div>
+    <div id="page-shifts" class="page hidden"></div>
+    <div id="page-hours" class="page hidden"></div>
+    <div id="page-screening" class="page hidden"></div>
+    <div id="page-training" class="page hidden"></div>
+    <div id="page-risk" class="page hidden"></div>
+    <div id="page-comms" class="page hidden"></div>
+    <div id="page-recognition" class="page hidden"></div>
+    <div id="page-reports" class="page hidden"></div>
+    <div id="page-build" class="page hidden"></div>
+    <div id="page-settings" class="page hidden"></div>
+
+    <div id="page-team" class="page hidden"></div>
+    <div id="page-history" class="page hidden"></div>
+    <div id="page-analytics" class="page hidden"></div>
+    <div id="page-admin" class="page hidden"></div>
+  </main>
+</div>
+
+<!-- Upgrade modal -->
+<div id="upgrade-modal" class="modal-bg hidden">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeUpgradeModal()">✕</button>
+    <div style="font-size:28px;margin-bottom:8px">⚡</div>
+    <div class="modal-title">Upgrade to Volunteer Pro</div>
+    <div class="modal-sub">Unlock unlimited team seats, priority support, and advanced volunteer management features.</div>
+    <ul style="font-size:13px;color:var(--text);line-height:1.7;margin:0 0 18px 18px">
+      <li><b>Unlimited team members</b> — Free is capped at 3 seats</li>
+      <li>Priority email support</li>
+      <li>SMS reminders for upcoming shifts (coming soon)</li>
+      <li>Export your data anytime</li>
+    </ul>
+    <div style="background:var(--light);padding:14px;border-radius:10px;text-align:center;margin-bottom:8px">
+      <div style="font-size:24px;font-weight:700;color:var(--navy)">$29<span style="font-size:13px;color:var(--muted);font-weight:400">/month</span></div>
+      <div style="font-size:12px;color:var(--muted)">14-day free trial · cancel anytime</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeUpgradeModal()">Maybe later</button>
+      <button class="btn btn-teal" onclick="startProTrial()">Start 14-day Free Trial →</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ═════════════════════════════════════════════
+//  STATIC DATA — org types, brackets, states
+// ═════════════════════════════════════════════
+const STATES = {
+  AL:'Alabama', AK:'Alaska', AZ:'Arizona', AR:'Arkansas', CA:'California',
+  CO:'Colorado', CT:'Connecticut', DE:'Delaware', DC:'District of Columbia',
+  FL:'Florida', GA:'Georgia', HI:'Hawaii', ID:'Idaho', IL:'Illinois',
+  IN:'Indiana', IA:'Iowa', KS:'Kansas', KY:'Kentucky', LA:'Louisiana',
+  ME:'Maine', MD:'Maryland', MA:'Massachusetts', MI:'Michigan', MN:'Minnesota',
+  MS:'Mississippi', MO:'Missouri', MT:'Montana', NE:'Nebraska', NV:'Nevada',
+  NH:'New Hampshire', NJ:'New Jersey', NM:'New Mexico', NY:'New York',
+  NC:'North Carolina', ND:'North Dakota', OH:'Ohio', OK:'Oklahoma', OR:'Oregon',
+  PA:'Pennsylvania', RI:'Rhode Island', SC:'South Carolina', SD:'South Dakota',
+  TN:'Tennessee', TX:'Texas', UT:'Utah', VT:'Vermont', VA:'Virginia',
+  WA:'Washington', WV:'West Virginia', WI:'Wisconsin', WY:'Wyoming'
+};
+
+// ═════════════════════════════════════════════
+//  STATE & PERSISTENCE
+// ═════════════════════════════════════════════
+const state = {
+  users: {},     // email -> { name, password, teamId, isSuperAdmin }
+  teams: {},     // teamId -> { id, profile, statuses, history, members:{email:role}, isPro, createdAt }
+  currentEmail: null,
+  selectedDoc: null,
+  selectedFiling: null,
+  selectedArticle: null,
+  adminViewingTeam: null
+};
+
+function save(){
+  try { localStorage.setItem('bya_volunteers_v1', JSON.stringify(state)); } catch(e){}
+}
+function load(){
+  try {
+    const raw = localStorage.getItem('bya_volunteers_v1');
+    if (raw){
+      const data = JSON.parse(raw);
+      Object.assign(state, data);
+    }
+  } catch(e){}
+}
+function currentUser(){ return state.currentEmail ? state.users[state.currentEmail] : null; }
+function currentTeam(){
+  if (state.adminViewingTeam && state.teams[state.adminViewingTeam]) return state.teams[state.adminViewingTeam];
+  const u = currentUser();
+  if (!u || !u.teamId) return null;
+  return state.teams[u.teamId] || null;
+}
+function isSuperAdmin(){ const u = currentUser(); return !!(u && u.isSuperAdmin); }
+function teamRole(){
+  const u = currentUser(); const t = currentTeam();
+  if (!u || !t) return null;
+  return t.members && t.members[state.currentEmail] || null;
+}
+function isLeader(){ return teamRole() === 'leader'; }
+
+function generateTeamCode(){
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let code;
+  do {
+    code = '';
+    for (let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
+  } while (state.teams[code]);
+  return code;
+}
+function createTeam(leaderEmail, profile){
+  const id = generateTeamCode();
+  state.teams[id] = {
+    id, profile: profile || {}, statuses: {}, history: [],
+    members: { [leaderEmail]: 'leader' },
+    isPro: false, isOnTrial: false, trialEnds: null,
+    proposals: [], templates: {}, funderLibrary: [], activeProposalId: null,
+    createdAt: new Date().toISOString()
+  };
+  return id;
+}
+function logHistory(entry){
+  const t = currentTeam();
+  if (!t) return;
+  t.history = t.history || [];
+  t.history.unshift({ ...entry, when: new Date().toISOString(), by: state.currentEmail });
+  if (t.history.length > 200) t.history.length = 200;
+}
+
+// Seed demo + admin once
+function seedDemo(){
+  if (!state.users['demo@example.org']){
+    state.users['demo@example.org'] = { name: 'Demo Leader', password: 'demo', teamId: null, isSuperAdmin: false };
+    const tid = createTeam('demo@example.org', { orgName:'Build Your Club Foundation' });
+    state.users['demo@example.org'].teamId = tid;
+    seedVolunteersForTeam(state.teams[tid]);
+    state.users['member@example.org'] = { name: 'Demo Member', password: 'demo', teamId: tid, isSuperAdmin: false };
+    state.teams[tid].members['member@example.org'] = 'member';
+  }
+  if (!state.users['skycopatc@yahoo.com']){
+    state.users['skycopatc@yahoo.com'] = { name: 'Steve (Admin)', password: 'Buildyourclub', teamId: null, isSuperAdmin: true };
+  }
+  save();
+}
+
+// ═════════════════════════════════════════════
+//  AUTH
+// ═════════════════════════════════════════════
+function switchAuthTab(which){
+  document.getElementById('tab-signin').classList.toggle('active', which==='signin');
+  document.getElementById('tab-signup').classList.toggle('active', which==='signup');
+  document.getElementById('form-signin').classList.toggle('hidden', which!=='signin');
+  document.getElementById('form-signup').classList.toggle('hidden', which!=='signup');
+}
+function doSignIn(){
+  const email = (document.getElementById('si-email').value || '').trim().toLowerCase();
+  const pass = document.getElementById('si-pass').value;
+  if (!email || !pass) { alert('Email and password required'); return; }
+  const u = state.users[email];
+  if (!u || u.password !== pass) { alert('Email not found or password incorrect.\n\nTry demo@example.org / demo'); return; }
+  state.currentEmail = email;
+  state.adminViewingTeam = null;
+  save();
+  routeAfterAuth();
+}
+function routeAfterAuth(){
+  const u = currentUser();
+  if (u.isSuperAdmin && !u.teamId){ bootApp(); return; }   // admin lands in admin view
+  if (u.teamId && state.teams[u.teamId]) bootApp();
+  else showTeamChoice();
+}
+function doSignUp(){
+  const name = (document.getElementById('su-name').value || '').trim();
+  const email = (document.getElementById('su-email').value || '').trim().toLowerCase();
+  const pass = document.getElementById('su-pass').value;
+  if (!name || !email || !pass) { alert('All fields required'); return; }
+  if (pass.length < 6) { alert('Password must be at least 6 characters'); return; }
+  if (state.users[email]) { alert('Account already exists. Try signing in.'); return; }
+  state.users[email] = { name, password: pass, teamId: null, isSuperAdmin: false };
+  state.currentEmail = email;
+  save();
+  showTeamChoice();
+}
+
+// Team choice (between auth and onboarding)
+function showTeamChoice(){
+  document.getElementById('screen-auth').classList.add('hidden');
+  document.getElementById('screen-onboard').classList.add('hidden');
+  document.getElementById('screen-app').classList.add('hidden');
+  document.getElementById('screen-teamchoice').classList.remove('hidden');
+  document.getElementById('join-team-section').classList.add('hidden');
+}
+function chooseTeamPath(p){
+  if (p === 'new'){
+    document.getElementById('screen-teamchoice').classList.add('hidden');
+    startOnboarding();
+  } else {
+    document.getElementById('join-team-section').classList.remove('hidden');
+    document.getElementById('join-code').focus();
+  }
+}
+function joinTeamByCode(){
+  const code = (document.getElementById('join-code').value || '').trim().toUpperCase();
+  if (!code) { alert('Enter a team code'); return; }
+  const team = state.teams[code];
+  if (!team) { alert('That team code wasn\'t found. Double-check with the team leader.'); return; }
+  const u = currentUser();
+  // Enforce free-tier seat limit
+  const memberCount = Object.keys(team.members||{}).length;
+  if (!team.isPro && memberCount >= 3){
+    alert('This team is on the Free plan and already has 3 members. Ask the team leader to upgrade to Pro for unlimited seats.');
+    return;
+  }
+  team.members[state.currentEmail] = 'member';
+  u.teamId = code;
+  save();
+  bootApp();
+}
+function signOut(){
+  state.currentEmail = null;
+  save();
+  document.getElementById('screen-app').classList.add('hidden');
+  document.getElementById('screen-onboard').classList.add('hidden');
+  document.getElementById('screen-auth').classList.remove('hidden');
+}
+
+// ═════════════════════════════════════════════
+//  ONBOARDING
+// ═════════════════════════════════════════════
+let obData = {};
+function startOnboarding(){
+  const t = currentTeam();
+  obData = (t && t.profile) || {};
+  document.getElementById('ob-orgname').value = obData.orgName || '';
+  document.getElementById('screen-auth').classList.add('hidden');
+  document.getElementById('screen-teamchoice').classList.add('hidden');
+  document.getElementById('screen-app').classList.add('hidden');
+  document.getElementById('screen-onboard').classList.remove('hidden');
+}
+function finishOnboarding(){
+  const name = document.getElementById('ob-orgname').value.trim();
+  if (!name){ alert('Please enter your organization name'); return; }
+  obData.orgName = name;
+  const u = currentUser();
+  if (u.teamId && state.teams[u.teamId]){
+    state.teams[u.teamId].profile = { ...state.teams[u.teamId].profile, ...obData };
+  } else {
+    const tid = createTeam(state.currentEmail, obData);
+    u.teamId = tid;
+  }
+  save();
+  bootApp();
+}
+
+// ═════════════════════════════════════════════
+//  APP BOOT
+// ═════════════════════════════════════════════
+function bootApp(){
+  document.getElementById('screen-auth').classList.add('hidden');
+  document.getElementById('screen-onboard').classList.add('hidden');
+  document.getElementById('screen-teamchoice').classList.add('hidden');
+  document.getElementById('screen-app').classList.remove('hidden');
+  const u = currentUser();
+  const t = currentTeam();
+  const orgLabel = t && t.profile && t.profile.orgName ? t.profile.orgName : (u.isSuperAdmin ? 'Super Admin' : '—');
+  document.getElementById('sb-org').textContent = orgLabel;
+  document.getElementById('sb-uname').textContent = u.name + (u.isSuperAdmin ? ' (Admin)' : '');
+  document.getElementById('sb-avatar').textContent = (u.name||'?').charAt(0).toUpperCase();
+  // Show admin nav only for super-admin
+  document.getElementById('nav-admin').classList.toggle('hidden', !u.isSuperAdmin);
+  // Pro badge
+  updateProBadge();
+  // Default page: admin for super-admin, dashboard otherwise
+  navigate(u.isSuperAdmin && !state.adminViewingTeam ? 'admin' : 'dashboard');
+}
+
+function updateProBadge(){
+  const t = currentTeam();
+  const badge = document.getElementById('pro-badge');
+  const label = document.getElementById('pro-label');
+  const sub = document.getElementById('pro-sub');
+  if (!badge) return;
+  if (!t) { badge.classList.add('hidden'); return; }
+  badge.classList.remove('hidden');
+  if (t.isPro){
+    badge.classList.add('is-pro');
+    label.textContent = '✓ Pro Plan';
+    sub.textContent = t.isOnTrial ? 'Trial ends ' + new Date(t.trialEnds).toLocaleDateString() : 'Unlimited team seats';
+  } else {
+    badge.classList.remove('is-pro');
+    label.textContent = '⚡ Upgrade to Pro';
+    sub.textContent = '$29/month · 14-day free trial';
+  }
+}
+
+// ═════════════════════════════════════════════
+//  NAVIGATION
+// ═════════════════════════════════════════════
+let currentPage = 'dashboard';
+function navigate(target){
+  const pages = ['dashboard','volunteers','applications','groups','opportunities','shifts','hours','screening','training','risk','comms','recognition','reports','build','history','analytics','team','settings','admin'];
+  pages.forEach(p => {
+    const el = document.getElementById('page-'+p);
+    if (el) el.classList.toggle('hidden', p !== target);
+    const nav = document.getElementById('nav-'+p);
+    if (nav) nav.classList.toggle('active', p === target);
+  });
+  currentPage = target;
+  const renderers = {
+    dashboard: renderDashboard, volunteers: renderVolunteers, applications: renderApplications, groups: renderGroups,
+    opportunities: renderOpportunities, shifts: renderShifts, hours: renderHours,
+    screening: renderScreening, training: renderTraining, risk: renderRisk,
+    comms: renderComms, recognition: renderRecognition, reports: renderReports, build: renderBuild,
+    history: renderHistory, analytics: renderAnalytics, team: renderTeam,
+    settings: renderSettings, admin: renderAdmin
+  };
+  if (renderers[target]) renderers[target]();
+  const back = document.getElementById('back-to-dash');
+  if (back) back.style.display = (target === 'dashboard' || target === 'admin') ? 'none' : 'flex';
+  window.scrollTo(0,0);
+}
+
+
+
+
+
+// ═════════════════════════════════════════════
+//  VOLUNTEER DATA
+// ═════════════════════════════════════════════
+const VOL_STATUSES = [
+  { id:'active', label:'Active', color:'badge-green' },
+  { id:'pending', label:'Pending Screening', color:'badge-amber' },
+  { id:'orientation', label:'Needs Orientation', color:'badge-blue' },
+  { id:'inactive', label:'Inactive', color:'badge-grey' },
+  { id:'archived', label:'Archived', color:'badge-grey' }
+];
+
+const APP_STATUSES = ['received','interviewing','accepted','declined','withdrawn'];
+
+const SCREENING_TYPES = ['Criminal Background Check','Driving Record','Sex Offender Registry','Reference Check','Drug Test','Child Abuse Registry','Other'];
+const SCREENING_STATUS = ['not_required','requested','in_progress','cleared','flagged','expired'];
+
+const TRAINING_TYPES = ['Orientation','CPR/First Aid','Mandated Reporter','Safe Environment','Driver Training','Conflict De-escalation','Boundaries Training','Confidentiality','Custom'];
+
+const SKILL_CATEGORIES = ['Languages','Professional','Technical','Physical','Interpersonal','Special Certifications'];
+
+const INCIDENT_SEVERITY = ['Low','Medium','High','Critical'];
+
+const COMMS_CHANNELS = ['Email','SMS','Phone','In-person','Newsletter','Social DM'];
+
+const RECOGNITION_MILESTONES = [
+  { hours: 10, label:'First Steps', icon:'🌱' },
+  { hours: 25, label:'Getting Started', icon:'🌿' },
+  { hours: 50, label:'Half-Century', icon:'⭐' },
+  { hours: 100, label:'Century Club', icon:'💯' },
+  { hours: 250, label:'Quarter-Thousand', icon:'🌟' },
+  { hours: 500, label:'Half-Thousand', icon:'🏆' },
+  { hours: 1000, label:'Thousand-Hour Hero', icon:'👑' },
+  { hours: 2500, label:'Founder\'s Circle', icon:'💎' }
+];
+
+// ═════════════════════════════════════════════
+//  HELPERS
+// ═════════════════════════════════════════════
+function teamData(){
+  const t = currentTeam();
+  if (!t) return null;
+  t.volunteers = t.volunteers || [];
+  t.applications = t.applications || [];
+  t.groups = t.groups || [];
+  t.opportunities = t.opportunities || [];
+  t.shifts = t.shifts || [];
+  t.hoursLog = t.hoursLog || [];
+  t.screenings = t.screenings || [];
+  t.trainings = t.trainings || [];
+  t.incidents = t.incidents || [];
+  t.waivers = t.waivers || [];
+  t.comms = t.comms || [];
+  t.commTemplates = t.commTemplates || [];
+  t.recognitionLog = t.recognitionLog || [];
+  return t;
+}
+function newId(p){ return p + Date.now() + Math.floor(Math.random()*1000); }
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function nlToBr(s){ return escapeHtml(s||'').replace(/\n/g,'<br>'); }
+function fmtDate(d){ if(!d) return '—'; try { return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); } catch(e){ return d; } }
+
+// Volunteers
+function volunteers(){ const t = teamData(); return t ? t.volunteers : []; }
+function getVolunteer(id){ const t = teamData(); if(!t) return null; return t.volunteers.find(v => v.id === id); }
+function createVolunteer(){ const t = teamData(); if(!t) return; t.volunteers.push({ id:newId('v-'), firstName:'', lastName:'', email:'', phone:'', emergencyName:'', emergencyPhone:'', skills:'', availability:'', interests:'', startDate:new Date().toISOString().slice(0,10), status:'pending', notes:'' }); save(); }
+function updateVolunteer(id, patch){ const t = teamData(); if(!t) return; const v = t.volunteers.find(x => x.id === id); if(v){ Object.assign(v, patch); save(); } }
+function deleteVolunteer(id){ const t = teamData(); if(!t) return; t.volunteers = t.volunteers.filter(v => v.id !== id); save(); }
+function totalHoursForVolunteer(id){ const t = teamData(); return (t.hoursLog||[]).filter(h => h.volunteerId === id).reduce((s,h) => s + (parseFloat(h.hours)||0), 0); }
+
+// Applications
+function applications(){ const t = teamData(); return t ? t.applications : []; }
+function createApplication(){ const t = teamData(); if(!t) return; t.applications.push({ id:newId('a-'), firstName:'', lastName:'', email:'', phone:'', interests:'', availability:'', referredBy:'', appliedDate:new Date().toISOString().slice(0,10), status:'received', notes:'' }); save(); }
+function updateApplication(id, patch){ const t = teamData(); if(!t) return; const a = t.applications.find(x => x.id === id); if(a){ Object.assign(a, patch); save(); } }
+function deleteApplication(id){ const t = teamData(); if(!t) return; t.applications = t.applications.filter(a => a.id !== id); save(); }
+function convertApplicationToVolunteer(appId){ const t = teamData(); if(!t) return; const a = t.applications.find(x => x.id === appId); if(!a) return; t.volunteers.push({ id:newId('v-'), firstName:a.firstName, lastName:a.lastName, email:a.email, phone:a.phone, emergencyName:'', emergencyPhone:'', skills:'', availability:a.availability, interests:a.interests, startDate:new Date().toISOString().slice(0,10), status:'pending', notes:'Converted from application '+a.appliedDate }); a.status = 'accepted'; save(); logHistory({type:'volunteer_added', itemName:'New volunteer: '+a.firstName+' '+a.lastName}); }
+
+// Groups
+function groups(){ const t = teamData(); return t ? t.groups : []; }
+function createGroup(){ const t = teamData(); if(!t) return; t.groups.push({ id:newId('g-'), orgName:'', sponsorName:'', sponsorEmail:'', type:'Corporate', size:'', date:'', project:'', hoursEach:'', totalHours:'', notes:'' }); save(); }
+function updateGroup(id, patch){ const t = teamData(); if(!t) return; const g = t.groups.find(x => x.id === id); if(g){ Object.assign(g, patch); save(); } }
+function deleteGroup(id){ const t = teamData(); if(!t) return; t.groups = t.groups.filter(g => g.id !== id); save(); }
+
+// Opportunities
+function opportunities(){ const t = teamData(); return t ? t.opportunities : []; }
+function createOpportunity(){ const t = teamData(); if(!t) return; t.opportunities.push({ id:newId('o-'), title:'', description:'', lead:'', leadEmail:'', timeCommitment:'', requirements:'', skillsNeeded:'', active:true, createdAt:new Date().toISOString() }); save(); }
+function updateOpportunity(id, patch){ const t = teamData(); if(!t) return; const o = t.opportunities.find(x => x.id === id); if(o){ Object.assign(o, patch); save(); } }
+function deleteOpportunity(id){ const t = teamData(); if(!t) return; t.opportunities = t.opportunities.filter(o => o.id !== id); save(); }
+
+// Shifts
+function shifts(){ const t = teamData(); return t ? t.shifts : []; }
+function createShift(){ const t = teamData(); if(!t) return; t.shifts.push({ id:newId('sh-'), opportunityId:'', title:'', date:'', startTime:'', endTime:'', location:'', spotsNeeded:1, signups:[], notes:'' }); save(); }
+function updateShift(id, patch){ const t = teamData(); if(!t) return; const s = t.shifts.find(x => x.id === id); if(s){ Object.assign(s, patch); save(); } }
+function deleteShift(id){ const t = teamData(); if(!t) return; t.shifts = t.shifts.filter(s => s.id !== id); save(); }
+function toggleShiftSignup(shiftId, volunteerId){ const t = teamData(); if(!t) return; const s = t.shifts.find(x => x.id === shiftId); if(!s) return; s.signups = s.signups || []; if(s.signups.includes(volunteerId)) s.signups = s.signups.filter(v => v !== volunteerId); else s.signups.push(volunteerId); save(); }
+
+// Hours log
+function hoursLog(){ const t = teamData(); return t ? t.hoursLog : []; }
+function logHours(){ const t = teamData(); if(!t) return; t.hoursLog.push({ id:newId('h-'), volunteerId:'', opportunityId:'', date:new Date().toISOString().slice(0,10), hours:'', notes:'' }); save(); }
+function updateHours(id, patch){ const t = teamData(); if(!t) return; const h = t.hoursLog.find(x => x.id === id); if(h){ Object.assign(h, patch); save(); } }
+function deleteHours(id){ const t = teamData(); if(!t) return; t.hoursLog = t.hoursLog.filter(h => h.id !== id); save(); }
+
+// Screenings
+function screenings(){ const t = teamData(); return t ? t.screenings : []; }
+function createScreening(volId){ const t = teamData(); if(!t) return; t.screenings.push({ id:newId('sc-'), volunteerId:volId||'', type:SCREENING_TYPES[0], status:'requested', requestedDate:new Date().toISOString().slice(0,10), completedDate:'', expiresDate:'', notes:'' }); save(); }
+function updateScreening(id, patch){ const t = teamData(); if(!t) return; const s = t.screenings.find(x => x.id === id); if(s){ Object.assign(s, patch); save(); } }
+function deleteScreening(id){ const t = teamData(); if(!t) return; t.screenings = t.screenings.filter(s => s.id !== id); save(); }
+
+// Trainings
+function trainings(){ const t = teamData(); return t ? t.trainings : []; }
+function createTraining(volId){ const t = teamData(); if(!t) return; t.trainings.push({ id:newId('tr-'), volunteerId:volId||'', type:TRAINING_TYPES[0], completedDate:'', expiresDate:'', certificateUrl:'', notes:'' }); save(); }
+function updateTraining(id, patch){ const t = teamData(); if(!t) return; const tr = t.trainings.find(x => x.id === id); if(tr){ Object.assign(tr, patch); save(); } }
+function deleteTraining(id){ const t = teamData(); if(!t) return; t.trainings = t.trainings.filter(tr => tr.id !== id); save(); }
+
+// Incidents
+function incidents(){ const t = teamData(); return t ? t.incidents : []; }
+function createIncident(){ const t = teamData(); if(!t) return; t.incidents.push({ id:newId('in-'), date:new Date().toISOString().slice(0,10), volunteerId:'', severity:'Low', description:'', actions:'', reportedBy:'', resolved:false }); save(); }
+function updateIncident(id, patch){ const t = teamData(); if(!t) return; const i = t.incidents.find(x => x.id === id); if(i){ Object.assign(i, patch); save(); } }
+function deleteIncident(id){ const t = teamData(); if(!t) return; t.incidents = t.incidents.filter(i => i.id !== id); save(); }
+
+// Communications
+function commsList(){ const t = teamData(); return t ? t.comms : []; }
+function logComm(){ const t = teamData(); if(!t) return; t.comms.push({ id:newId('c-'), date:new Date().toISOString().slice(0,10), channel:'Email', recipients:'', subject:'', summary:'', sender:'' }); save(); }
+function updateComm(id, patch){ const t = teamData(); if(!t) return; const c = t.comms.find(x => x.id === id); if(c){ Object.assign(c, patch); save(); } }
+function deleteComm(id){ const t = teamData(); if(!t) return; t.comms = t.comms.filter(c => c.id !== id); save(); }
+function commTemplates(){ const t = teamData(); return t ? t.commTemplates : []; }
+function createCommTemplate(){ const t = teamData(); if(!t) return; t.commTemplates.push({ id:newId('ct-'), name:'', subject:'', body:'' }); save(); }
+function updateCommTemplate(id, patch){ const t = teamData(); if(!t) return; const c = t.commTemplates.find(x => x.id === id); if(c){ Object.assign(c, patch); save(); } }
+function deleteCommTemplate(id){ const t = teamData(); if(!t) return; t.commTemplates = t.commTemplates.filter(c => c.id !== id); save(); }
+
+// Recognition
+function recognitionLog(){ const t = teamData(); return t ? t.recognitionLog : []; }
+function createRecognition(){ const t = teamData(); if(!t) return; t.recognitionLog.push({ id:newId('r-'), volunteerId:'', type:'Milestone', date:new Date().toISOString().slice(0,10), description:'', publicSpotlight:false }); save(); }
+function updateRecognition(id, patch){ const t = teamData(); if(!t) return; const r = t.recognitionLog.find(x => x.id === id); if(r){ Object.assign(r, patch); save(); } }
+function deleteRecognition(id){ const t = teamData(); if(!t) return; t.recognitionLog = t.recognitionLog.filter(r => r.id !== id); save(); }
+
+function getMilestonesEarned(hours){
+  return RECOGNITION_MILESTONES.filter(m => hours >= m.hours);
+}
+function getNextMilestone(hours){
+  return RECOGNITION_MILESTONES.find(m => hours < m.hours);
+}
+
+// Seed demo
+function seedVolunteersForTeam(team){
+  if (!team) return;
+  ['volunteers','applications','groups','opportunities','shifts','hoursLog','screenings','trainings','incidents','comms','commTemplates','recognitionLog'].forEach(k => { team[k] = team[k] || (k==='commTemplates'||k==='comms'?[]:[]); });
+  if (team.volunteers.length === 0){
+    team.volunteers.push({ id:'v-1', firstName:'Maria', lastName:'Lopez', email:'maria.l@example.com', phone:'(415) 555-0101', emergencyName:'Carlos Lopez', emergencyPhone:'(415) 555-0102', skills:'Spanish-speaking, food handler certified, driver', availability:'Weekday evenings + Saturdays', interests:'Food pantry, family services', startDate:'2024-03-15', status:'active', notes:'Reliable. Took on shift leader role.' });
+    team.volunteers.push({ id:'v-2', firstName:'James', lastName:'Park', email:'james.p@example.com', phone:'(415) 555-0103', emergencyName:'Jenny Park', emergencyPhone:'(415) 555-0104', skills:'Carpentry, comfortable with tools, project management', availability:'Saturdays', interests:'Build projects, repairs', startDate:'2024-06-01', status:'active', notes:'' });
+    team.volunteers.push({ id:'v-3', firstName:'Aisha', lastName:'Khan', email:'aisha.k@example.com', phone:'(415) 555-0105', emergencyName:'', emergencyPhone:'', skills:'Marketing, social media, writing', availability:'Remote, weekday afternoons', interests:'Communications, content creation', startDate:'2025-01-10', status:'orientation', notes:'Awaiting orientation session.' });
+    team.volunteers.push({ id:'v-4', firstName:'Tom', lastName:'Reilly', email:'tom.r@example.com', phone:'(415) 555-0106', emergencyName:'', emergencyPhone:'', skills:'Retired teacher, tutoring, ESL', availability:'Weekday mornings', interests:'Education, tutoring', startDate:'2023-09-20', status:'active', notes:'Long-term tutor for our adult literacy program.' });
+  }
+  if (team.opportunities.length === 0){
+    team.opportunities.push({ id:'o-1', title:'Food Pantry Distribution', description:'Help sort, pack, and distribute groceries during our Wednesday and Saturday pantry shifts.', lead:'Maria Lopez', leadEmail:'maria.l@example.com', timeCommitment:'3-4 hours per shift', requirements:'Background check; food handler card preferred', skillsNeeded:'Physical lifting (up to 30 lbs); Spanish a plus', active:true, createdAt:new Date().toISOString() });
+    team.opportunities.push({ id:'o-2', title:'Adult Literacy Tutor', description:'One-on-one tutoring with adult learners working toward GED or English proficiency.', lead:'Tom Reilly', leadEmail:'tom.r@example.com', timeCommitment:'2 hours/week for one semester', requirements:'Background check; orientation + 4-hour training', skillsNeeded:'Patience, communication, no teaching experience required', active:true, createdAt:new Date().toISOString() });
+    team.opportunities.push({ id:'o-3', title:'Saturday Workshop Lead', description:'Lead a 2-hour skill-building workshop on a Saturday morning. Topics rotate.', lead:'Aisha Khan', leadEmail:'aisha.k@example.com', timeCommitment:'2-3 hours, one Saturday/month', requirements:'Subject-matter expertise in the workshop topic', skillsNeeded:'Public speaking, comfort with small groups', active:true, createdAt:new Date().toISOString() });
+  }
+  if (team.shifts.length === 0){
+    team.shifts.push({ id:'sh-1', opportunityId:'o-1', title:'Wednesday Pantry — 6/4', date:'2026-06-04', startTime:'3:00 PM', endTime:'6:00 PM', location:'Pantry Building', spotsNeeded:6, signups:['v-1','v-2'], notes:'' });
+    team.shifts.push({ id:'sh-2', opportunityId:'o-1', title:'Saturday Pantry — 6/7', date:'2026-06-07', startTime:'9:00 AM', endTime:'12:00 PM', location:'Pantry Building', spotsNeeded:8, signups:['v-1'], notes:'Bigger crowd expected this week' });
+  }
+  if (team.hoursLog.length === 0){
+    team.hoursLog.push({ id:'h-1', volunteerId:'v-1', opportunityId:'o-1', date:'2026-05-28', hours:'3.5', notes:'Wednesday pantry shift' });
+    team.hoursLog.push({ id:'h-2', volunteerId:'v-1', opportunityId:'o-1', date:'2026-05-31', hours:'3', notes:'Saturday pantry' });
+    team.hoursLog.push({ id:'h-3', volunteerId:'v-2', opportunityId:'o-1', date:'2026-05-28', hours:'3.5', notes:'' });
+    team.hoursLog.push({ id:'h-4', volunteerId:'v-4', opportunityId:'o-2', date:'2026-05-29', hours:'2', notes:'Weekly tutoring' });
+    team.hoursLog.push({ id:'h-5', volunteerId:'v-4', opportunityId:'o-2', date:'2026-06-05', hours:'2', notes:'' });
+    // Add some historical hours for Tom to push him over milestones
+    for (let i = 0; i < 50; i++){
+      team.hoursLog.push({ id:'h-tom-'+i, volunteerId:'v-4', opportunityId:'o-2', date:'2024-0'+((i%9)+1)+'-1'+(i%9), hours:'2', notes:'' });
+    }
+  }
+  if (team.applications.length === 0){
+    team.applications.push({ id:'a-1', firstName:'David', lastName:'Chen', email:'david.c@example.com', phone:'(415) 555-0201', interests:'Tutoring, weekday afternoons', availability:'M/W/F afternoons', referredBy:'Tom Reilly', appliedDate:'2026-06-01', status:'received', notes:'Eager to start. Tom recommends.' });
+    team.applications.push({ id:'a-2', firstName:'Sarah', lastName:'Williams', email:'sarah.w@example.com', phone:'(415) 555-0202', interests:'Food pantry, family events', availability:'Saturdays', referredBy:'Walk-in', appliedDate:'2026-06-05', status:'interviewing', notes:'' });
+  }
+  if (team.screenings.length === 0){
+    team.screenings.push({ id:'sc-1', volunteerId:'v-1', type:'Criminal Background Check', status:'cleared', requestedDate:'2024-03-01', completedDate:'2024-03-12', expiresDate:'2027-03-12', notes:'' });
+    team.screenings.push({ id:'sc-2', volunteerId:'v-2', type:'Criminal Background Check', status:'cleared', requestedDate:'2024-05-15', completedDate:'2024-05-22', expiresDate:'2027-05-22', notes:'' });
+    team.screenings.push({ id:'sc-3', volunteerId:'v-3', type:'Criminal Background Check', status:'in_progress', requestedDate:'2026-01-10', completedDate:'', expiresDate:'', notes:'Waiting on results' });
+    team.screenings.push({ id:'sc-4', volunteerId:'v-4', type:'Criminal Background Check', status:'cleared', requestedDate:'2023-09-15', completedDate:'2023-09-21', expiresDate:'2026-09-21', notes:'Renewal due in 3 months' });
+  }
+  if (team.trainings.length === 0){
+    team.trainings.push({ id:'tr-1', volunteerId:'v-1', type:'Orientation', completedDate:'2024-03-20', expiresDate:'', certificateUrl:'', notes:'' });
+    team.trainings.push({ id:'tr-2', volunteerId:'v-1', type:'Mandated Reporter', completedDate:'2024-04-10', expiresDate:'2026-04-10', certificateUrl:'', notes:'' });
+    team.trainings.push({ id:'tr-3', volunteerId:'v-4', type:'Orientation', completedDate:'2023-09-25', expiresDate:'', certificateUrl:'', notes:'' });
+    team.trainings.push({ id:'tr-4', volunteerId:'v-4', type:'Boundaries Training', completedDate:'2023-10-05', expiresDate:'2026-10-05', certificateUrl:'', notes:'' });
+  }
+  if (team.groups.length === 0){
+    team.groups.push({ id:'g-1', orgName:'Wells Fargo — SF Region', sponsorName:'Lisa Tran', sponsorEmail:'lisa.tran@wf.example.com', type:'Corporate', size:'15', date:'2026-04-22', project:'Pantry deep-clean and inventory', hoursEach:'4', totalHours:'60', notes:'Annual day-of-service. Lisa wants to come back in October.' });
+  }
+  if (team.commTemplates.length === 0){
+    team.commTemplates.push({ id:'ct-1', name:'Welcome New Volunteer', subject:'Welcome to [Org Name]!', body:'Hi [First Name],\n\nWelcome to the team! We\'re thrilled you\'re joining us.\n\nYour first step is our 60-minute orientation. We have sessions every other Thursday. Pick a date that works:\n[Signup link]\n\nQuestions? Reply directly to this email.\n\n— The Volunteer Team' });
+    team.commTemplates.push({ id:'ct-2', name:'Shift Reminder (3 days out)', subject:'Reminder: Your shift on [Date]', body:'Hi [First Name],\n\nQuick reminder that you\'re scheduled for:\n\n[Shift name]\n[Date] · [Start]–[End]\n[Location]\n\nWear closed-toe shoes; bring water. We\'ll provide everything else.\n\nCan\'t make it? Please reply ASAP so we can fill the spot.\n\nThanks!\n— The Volunteer Team' });
+    team.commTemplates.push({ id:'ct-3', name:'100-Hour Milestone Recognition', subject:'You\'ve hit 100 hours!', body:'Hi [First Name],\n\nWe just noticed something — you\'ve crossed 100 volunteer hours with us. That\'s a real milestone.\n\nThank you. The work you do shows up in the lives of the people we serve, and we don\'t want to let this go by without saying so.\n\nWith deep gratitude,\n[Executive Director Name]' });
+  }
+  if (team.recognitionLog.length === 0){
+    team.recognitionLog.push({ id:'r-1', volunteerId:'v-4', type:'Milestone', date:'2026-05-15', description:'Crossed 100-hour milestone', publicSpotlight:true });
+  }
+}
+
+// ═════════════════════════════════════════════
+//  DASHBOARD
+// ═════════════════════════════════════════════
+function renderDashboard(){
+  const t = teamData();
+  if (!t){ document.getElementById('page-dashboard').innerHTML = '<div class="empty-state">No team. Click Admin in sidebar to view one, or sign in as a regular user.</div>'; return; }
+  const vols = t.volunteers || [];
+  const active = vols.filter(v => v.status === 'active').length;
+  const pending = vols.filter(v => v.status === 'pending').length;
+  const apps = (t.applications||[]).filter(a => a.status === 'received' || a.status === 'interviewing').length;
+  const totalHours = (t.hoursLog||[]).reduce((s,h) => s + (parseFloat(h.hours)||0), 0);
+  const thisMonth = new Date(); thisMonth.setDate(1);
+  const monthHours = (t.hoursLog||[]).filter(h => new Date(h.date) >= thisMonth).reduce((s,h) => s + (parseFloat(h.hours)||0), 0);
+  const upcomingShifts = (t.shifts||[]).filter(s => s.date && new Date(s.date) >= new Date()).sort((a,b) => a.date.localeCompare(b.date));
+  const expiringScreenings = (t.screenings||[]).filter(s => s.expiresDate && new Date(s.expiresDate) < new Date(Date.now() + 90*24*60*60*1000) && s.status === 'cleared');
+
+  const stat = (label, num, sub, cls) => `<div class="stat-card ${cls||''}"><div class="stat-label">${label}</div><div class="stat-num">${num}</div><div class="stat-sub">${sub||''}</div></div>`;
+
+  document.getElementById('page-dashboard').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Volunteer Dashboard</h1><div class="page-sub">${escapeHtml(t.profile.orgName||'(unnamed)')}</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn btn-red" href="Guide.html" target="_blank" rel="noopener noreferrer">📖 User Guide</a>
+        <button class="btn btn-teal" onclick="createVolunteer(); navigate('volunteers')">+ Add Volunteer</button>
+      </div>
+    </div>
+    <div class="stats-grid">
+      ${stat('Active volunteers', active, vols.length + ' total · ' + pending + ' pending')}
+      ${stat('Hours this month', monthHours.toFixed(1), totalHours.toFixed(0) + ' lifetime')}
+      ${stat('Open applications', apps, 'awaiting decision')}
+      ${stat('Upcoming shifts', upcomingShifts.length, 'next 30 days', upcomingShifts.length===0?'alert':'')}
+    </div>
+    ${expiringScreenings.length ? `<div class="section">
+      <div class="section-title">⚠ Screenings expiring soon <span class="badge badge-red">${expiringScreenings.length}</span></div>
+      ${expiringScreenings.map(s => { const v = getVolunteer(s.volunteerId); return `<div class="dl-row overdue"><div class="dl-when overdue">${fmtDate(s.expiresDate)}</div><div class="dl-info"><div class="dl-name">${v?escapeHtml(v.firstName+' '+v.lastName):'(unknown)'}</div><div class="dl-meta">${escapeHtml(s.type)}</div></div></div>`; }).join('')}
+    </div>` : ''}
+    <div class="section">
+      <div class="section-title">Upcoming Shifts <span class="badge badge-amber">${upcomingShifts.length}</span></div>
+      ${upcomingShifts.slice(0,5).map(s => {
+        const filled = (s.signups||[]).length;
+        const needed = parseInt(s.spotsNeeded)||0;
+        return `<div class="dl-row" onclick="navigate('shifts')"><div class="dl-when">${fmtDate(s.date)}</div><div class="dl-info"><div class="dl-name">${escapeHtml(s.title||'Shift')}</div><div class="dl-meta">${escapeHtml(s.startTime||'')}–${escapeHtml(s.endTime||'')} · ${escapeHtml(s.location||'')}</div></div><span class="hist-status-chip ${filled>=needed?'badge-green':(filled>=needed*0.5?'badge-amber':'badge-red')}">${filled}/${needed}</span></div>`;
+      }).join('') || '<div class="empty-state">No upcoming shifts. Add one from the Shifts page.</div>'}
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  VOLUNTEERS DIRECTORY
+// ═════════════════════════════════════════════
+function renderVolunteers(){
+  const t = teamData(); if (!t){ document.getElementById('page-volunteers').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const vs = t.volunteers || [];
+  document.getElementById('page-volunteers').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Volunteer Directory</h1><div class="page-sub">${vs.length} volunteer${vs.length===1?'':'s'} · profiles, skills, status, contact</div></div>
+      <div><button class="btn btn-teal" onclick="createVolunteer(); navigate('volunteers')">+ Add Volunteer</button></div>
+    </div>
+    ${vs.map(v => {
+      const hrs = totalHoursForVolunteer(v.id);
+      const st = VOL_STATUSES.find(s => s.id === v.status) || VOL_STATUSES[0];
+      const next = getNextMilestone(hrs);
+      return `<div class="section">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:17px;font-weight:700;color:var(--navy)">${escapeHtml((v.firstName||'')+' '+(v.lastName||''))}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">${escapeHtml(v.email||'')}${v.phone?' · '+escapeHtml(v.phone):''} · Started ${fmtDate(v.startDate)} · ${hrs.toFixed(1)} hrs total${next?` · ${next.hours - Math.floor(hrs)} hrs to ${next.icon} ${next.label}`:''}</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <select onchange="updateVolunteer('${v.id}',{status:this.value})" style="padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px">${VOL_STATUSES.map(s => `<option value="${s.id}" ${v.status===s.id?'selected':''}>${s.label}</option>`).join('')}</select>
+            <button class="btn btn-outline" style="padding:5px 9px;font-size:11px" onclick="if(confirm('Delete volunteer?'))deleteVolunteer('${v.id}'); navigate('volunteers')">✕</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+          <div class="field"><label>First Name</label><input type="text" value="${escapeHtml(v.firstName)}" oninput="updateVolunteer('${v.id}',{firstName:this.value})"></div>
+          <div class="field"><label>Last Name</label><input type="text" value="${escapeHtml(v.lastName)}" oninput="updateVolunteer('${v.id}',{lastName:this.value})"></div>
+          <div class="field"><label>Email</label><input type="text" value="${escapeHtml(v.email)}" oninput="updateVolunteer('${v.id}',{email:this.value})"></div>
+          <div class="field"><label>Phone</label><input type="text" value="${escapeHtml(v.phone)}" oninput="updateVolunteer('${v.id}',{phone:this.value})"></div>
+          <div class="field"><label>Start Date</label><input type="date" value="${escapeHtml(v.startDate||'')}" oninput="updateVolunteer('${v.id}',{startDate:this.value})"></div>
+          <div class="field"><label>Emergency Contact</label><input type="text" value="${escapeHtml(v.emergencyName)}" oninput="updateVolunteer('${v.id}',{emergencyName:this.value})" placeholder="Name"></div>
+          <div class="field"><label>Emergency Phone</label><input type="text" value="${escapeHtml(v.emergencyPhone)}" oninput="updateVolunteer('${v.id}',{emergencyPhone:this.value})"></div>
+        </div>
+        <div class="field"><label>Skills</label><input type="text" value="${escapeHtml(v.skills)}" oninput="updateVolunteer('${v.id}',{skills:this.value})" placeholder="Spanish-speaking, driver, food handler, marketing, etc."></div>
+        <div class="field"><label>Availability</label><input type="text" value="${escapeHtml(v.availability)}" oninput="updateVolunteer('${v.id}',{availability:this.value})" placeholder="Saturdays + weekday evenings"></div>
+        <div class="field"><label>Interests</label><input type="text" value="${escapeHtml(v.interests)}" oninput="updateVolunteer('${v.id}',{interests:this.value})"></div>
+        <div class="field"><label>Notes</label><textarea oninput="updateVolunteer('${v.id}',{notes:this.value})" style="min-height:50px">${escapeHtml(v.notes)}</textarea></div>
+      </div>`;
+    }).join('') || '<div class="empty-state">No volunteers yet. Click + Add Volunteer.</div>'}
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  APPLICATIONS
+// ═════════════════════════════════════════════
+function renderApplications(){
+  const t = teamData(); if (!t){ document.getElementById('page-applications').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const as = t.applications || [];
+  document.getElementById('page-applications').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Applications</h1><div class="page-sub">${as.length} application${as.length===1?'':'s'} · sign-up pipeline</div></div>
+      <div><button class="btn btn-teal" onclick="createApplication(); navigate('applications')">+ New Application</button></div>
+    </div>
+    ${as.map(a => `<div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:16px;font-weight:700;color:var(--navy)">${escapeHtml((a.firstName||'')+' '+(a.lastName||''))}</div>
+          <div style="font-size:12px;color:var(--muted)">${escapeHtml(a.email||'')} · Applied ${fmtDate(a.appliedDate)}${a.referredBy?' · Referred by '+escapeHtml(a.referredBy):''}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <select onchange="updateApplication('${a.id}',{status:this.value})" style="padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px">${APP_STATUSES.map(s => `<option value="${s}" ${a.status===s?'selected':''}>${s}</option>`).join('')}</select>
+          ${a.status!=='accepted' ? `<button class="btn btn-teal" style="padding:5px 10px;font-size:11px" onclick="convertApplicationToVolunteer('${a.id}'); navigate('applications')">Accept →</button>` : ''}
+          <button class="btn btn-outline" style="padding:5px 9px;font-size:11px" onclick="if(confirm('Delete?'))deleteApplication('${a.id}'); navigate('applications')">✕</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+        <div class="field"><label>First Name</label><input type="text" value="${escapeHtml(a.firstName)}" oninput="updateApplication('${a.id}',{firstName:this.value})"></div>
+        <div class="field"><label>Last Name</label><input type="text" value="${escapeHtml(a.lastName)}" oninput="updateApplication('${a.id}',{lastName:this.value})"></div>
+        <div class="field"><label>Email</label><input type="text" value="${escapeHtml(a.email)}" oninput="updateApplication('${a.id}',{email:this.value})"></div>
+        <div class="field"><label>Phone</label><input type="text" value="${escapeHtml(a.phone)}" oninput="updateApplication('${a.id}',{phone:this.value})"></div>
+        <div class="field"><label>Applied Date</label><input type="date" value="${escapeHtml(a.appliedDate||'')}" oninput="updateApplication('${a.id}',{appliedDate:this.value})"></div>
+        <div class="field"><label>Referred By</label><input type="text" value="${escapeHtml(a.referredBy)}" oninput="updateApplication('${a.id}',{referredBy:this.value})"></div>
+      </div>
+      <div class="field"><label>Interests / Why they want to volunteer</label><textarea oninput="updateApplication('${a.id}',{interests:this.value})" style="min-height:60px">${escapeHtml(a.interests)}</textarea></div>
+      <div class="field"><label>Availability</label><input type="text" value="${escapeHtml(a.availability)}" oninput="updateApplication('${a.id}',{availability:this.value})"></div>
+      <div class="field"><label>Notes</label><textarea oninput="updateApplication('${a.id}',{notes:this.value})" style="min-height:50px">${escapeHtml(a.notes)}</textarea></div>
+    </div>`).join('') || '<div class="empty-state">No applications yet.</div>'}
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  GROUPS
+// ═════════════════════════════════════════════
+function renderGroups(){
+  const t = teamData(); if (!t){ document.getElementById('page-groups').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const gs = t.groups || [];
+  document.getElementById('page-groups').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Group Volunteers</h1><div class="page-sub">${gs.length} group${gs.length===1?'':'s'} · corporate days, schools, family groups</div></div>
+      <div><button class="btn btn-teal" onclick="createGroup(); navigate('groups')">+ Add Group</button></div>
+    </div>
+    ${gs.map(g => `<div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:10px">
+        <div style="font-size:16px;font-weight:700;color:var(--navy)">${escapeHtml(g.orgName||'(unnamed)')}</div>
+        <button class="btn btn-outline" style="padding:5px 9px;font-size:11px" onclick="if(confirm('Delete?'))deleteGroup('${g.id}'); navigate('groups')">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+        <div class="field"><label>Organization</label><input type="text" value="${escapeHtml(g.orgName)}" oninput="updateGroup('${g.id}',{orgName:this.value})"></div>
+        <div class="field"><label>Type</label><select onchange="updateGroup('${g.id}',{type:this.value})">${['Corporate','School','Religious','Civic Group','Family','Other'].map(o => `<option ${g.type===o?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div class="field"><label>Sponsor / Contact</label><input type="text" value="${escapeHtml(g.sponsorName)}" oninput="updateGroup('${g.id}',{sponsorName:this.value})"></div>
+        <div class="field"><label>Sponsor Email</label><input type="text" value="${escapeHtml(g.sponsorEmail)}" oninput="updateGroup('${g.id}',{sponsorEmail:this.value})"></div>
+        <div class="field"><label># of Volunteers</label><input type="text" value="${escapeHtml(g.size)}" oninput="updateGroup('${g.id}',{size:this.value})"></div>
+        <div class="field"><label>Date</label><input type="date" value="${escapeHtml(g.date||'')}" oninput="updateGroup('${g.id}',{date:this.value})"></div>
+        <div class="field"><label>Hours each</label><input type="text" value="${escapeHtml(g.hoursEach)}" oninput="updateGroup('${g.id}',{hoursEach:this.value, totalHours:String((parseFloat(this.value)||0)*(parseFloat(g.size)||0))})" placeholder="4"></div>
+        <div class="field"><label>Total Hours</label><input type="text" value="${escapeHtml(g.totalHours)}" oninput="updateGroup('${g.id}',{totalHours:this.value})"></div>
+      </div>
+      <div class="field"><label>Project</label><input type="text" value="${escapeHtml(g.project)}" oninput="updateGroup('${g.id}',{project:this.value})" placeholder="Pantry deep-clean, garden cleanup, etc."></div>
+      <div class="field"><label>Notes</label><textarea oninput="updateGroup('${g.id}',{notes:this.value})" style="min-height:50px">${escapeHtml(g.notes)}</textarea></div>
+    </div>`).join('') || '<div class="empty-state">No groups yet.</div>'}
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  OPPORTUNITIES
+// ═════════════════════════════════════════════
+function renderOpportunities(){
+  const t = teamData(); if (!t){ document.getElementById('page-opportunities').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const os = t.opportunities || [];
+  document.getElementById('page-opportunities').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Volunteer Opportunities</h1><div class="page-sub">${os.length} role${os.length===1?'':'s'} · catalog of ongoing volunteer roles</div></div>
+      <div><button class="btn btn-teal" onclick="createOpportunity(); navigate('opportunities')">+ New Opportunity</button></div>
+    </div>
+    ${os.map(o => `<div class="section">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <input type="text" value="${escapeHtml(o.title)}" oninput="updateOpportunity('${o.id}',{title:this.value})" placeholder="Role title" style="font-size:16px;font-weight:700;color:var(--navy);border:none;background:transparent;padding:0;flex:1">
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" ${o.active?'checked':''} onchange="updateOpportunity('${o.id}',{active:this.checked})"> Active</label>
+        </div>
+        <button class="btn btn-outline" style="padding:5px 9px;font-size:11px" onclick="if(confirm('Delete?'))deleteOpportunity('${o.id}'); navigate('opportunities')">✕</button>
+      </div>
+      <div class="field"><label>Description</label><textarea oninput="updateOpportunity('${o.id}',{description:this.value})" style="min-height:80px">${escapeHtml(o.description)}</textarea></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+        <div class="field"><label>Lead / Owner</label><input type="text" value="${escapeHtml(o.lead)}" oninput="updateOpportunity('${o.id}',{lead:this.value})"></div>
+        <div class="field"><label>Lead Email</label><input type="text" value="${escapeHtml(o.leadEmail)}" oninput="updateOpportunity('${o.id}',{leadEmail:this.value})"></div>
+        <div class="field"><label>Time Commitment</label><input type="text" value="${escapeHtml(o.timeCommitment)}" oninput="updateOpportunity('${o.id}',{timeCommitment:this.value})" placeholder="2 hrs/week for one semester"></div>
+      </div>
+      <div class="field"><label>Requirements</label><textarea oninput="updateOpportunity('${o.id}',{requirements:this.value})" style="min-height:50px" placeholder="Background check; orientation + training; minimum age">${escapeHtml(o.requirements)}</textarea></div>
+      <div class="field"><label>Skills Needed</label><textarea oninput="updateOpportunity('${o.id}',{skillsNeeded:this.value})" style="min-height:50px">${escapeHtml(o.skillsNeeded)}</textarea></div>
+    </div>`).join('') || '<div class="empty-state">No opportunities yet.</div>'}
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  SHIFTS & SCHEDULE
+// ═════════════════════════════════════════════
+function renderShifts(){
+  const t = teamData(); if (!t){ document.getElementById('page-shifts').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const sh = (t.shifts||[]).slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
+  const opts = t.opportunities || [];
+  const vs = t.volunteers || [];
+  document.getElementById('page-shifts').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Shifts & Schedule</h1><div class="page-sub">${sh.length} shift${sh.length===1?'':'s'} · specific time slots tied to opportunities</div></div>
+      <div><button class="btn btn-teal" onclick="createShift(); navigate('shifts')">+ New Shift</button></div>
+    </div>
+    ${sh.map(s => {
+      const opp = opts.find(o => o.id === s.opportunityId);
+      const filled = (s.signups||[]).length;
+      const needed = parseInt(s.spotsNeeded)||0;
+      return `<div class="section">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:16px;font-weight:700;color:var(--navy)">${escapeHtml(s.title||'(unnamed shift)')}</div>
+            <div style="font-size:12px;color:var(--muted)">${fmtDate(s.date)} · ${escapeHtml(s.startTime||'')}–${escapeHtml(s.endTime||'')} · ${escapeHtml(s.location||'')}${opp?' · '+escapeHtml(opp.title):''}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="hist-status-chip ${filled>=needed?'badge-green':(filled>=needed*0.5?'badge-amber':'badge-red')}">${filled}/${needed} filled</span>
+            <button class="btn btn-outline" style="padding:5px 9px;font-size:11px" onclick="if(confirm('Delete?'))deleteShift('${s.id}'); navigate('shifts')">✕</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+          <div class="field"><label>Title</label><input type="text" value="${escapeHtml(s.title)}" oninput="updateShift('${s.id}',{title:this.value})"></div>
+          <div class="field"><label>Opportunity</label><select onchange="updateShift('${s.id}',{opportunityId:this.value})"><option value="">—</option>${opts.map(o => `<option value="${o.id}" ${s.opportunityId===o.id?'selected':''}>${escapeHtml(o.title)}</option>`).join('')}</select></div>
+          <div class="field"><label>Date</label><input type="date" value="${escapeHtml(s.date||'')}" oninput="updateShift('${s.id}',{date:this.value})"></div>
+          <div class="field"><label>Start</label><input type="text" value="${escapeHtml(s.startTime)}" oninput="updateShift('${s.id}',{startTime:this.value})" placeholder="9:00 AM"></div>
+          <div class="field"><label>End</label><input type="text" value="${escapeHtml(s.endTime)}" oninput="updateShift('${s.id}',{endTime:this.value})" placeholder="12:00 PM"></div>
+          <div class="field"><label>Location</label><input type="text" value="${escapeHtml(s.location)}" oninput="updateShift('${s.id}',{location:this.value})"></div>
+          <div class="field"><label>Spots</label><input type="number" value="${escapeHtml(s.spotsNeeded)}" oninput="updateShift('${s.id}',{spotsNeeded:this.value})" min="1"></div>
+        </div>
+        <div class="field"><label>Sign-ups</label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${vs.map(v => `<label style="display:flex;align-items:center;gap:5px;font-size:12px;background:${(s.signups||[]).includes(v.id)?'rgba(42,123,111,.12)':'var(--light)'};border:1px solid var(--border);border-radius:6px;padding:6px 10px;cursor:pointer"><input type="checkbox" ${(s.signups||[]).includes(v.id)?'checked':''} onchange="toggleShiftSignup('${s.id}','${v.id}'); navigate('shifts')"> ${escapeHtml(v.firstName+' '+v.lastName)}</label>`).join('')}</div>
+        </div>
+        <div class="field"><label>Notes</label><textarea oninput="updateShift('${s.id}',{notes:this.value})" style="min-height:40px">${escapeHtml(s.notes)}</textarea></div>
+      </div>`;
+    }).join('') || '<div class="empty-state">No shifts yet.</div>'}
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  HOURS LOG
+// ═════════════════════════════════════════════
+function renderHours(){
+  const t = teamData(); if (!t){ document.getElementById('page-hours').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const hs = (t.hoursLog||[]).slice().sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  const vs = t.volunteers || []; const opts = t.opportunities || [];
+  const total = hs.reduce((s,h) => s + (parseFloat(h.hours)||0), 0);
+
+  document.getElementById('page-hours').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Hours Log</h1><div class="page-sub">${hs.length} entr${hs.length===1?'y':'ies'} · ${total.toFixed(1)} total hours logged</div></div>
+      <div><button class="btn btn-teal" onclick="logHours(); navigate('hours')">+ Log Hours</button></div>
+    </div>
+    <div class="section">
+      ${hs.length ? `<table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:var(--light)">
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Date</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Volunteer</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Opportunity</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Hours</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Notes</th>
+          <th></th>
+        </tr></thead>
+        <tbody>${hs.map(h => `<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:5px"><input type="date" value="${escapeHtml(h.date||'')}" oninput="updateHours('${h.id}',{date:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><select onchange="updateHours('${h.id}',{volunteerId:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px;max-width:160px"><option value="">—</option>${vs.map(v => `<option value="${v.id}" ${h.volunteerId===v.id?'selected':''}>${escapeHtml(v.firstName+' '+v.lastName)}</option>`).join('')}</select></td>
+          <td style="padding:5px"><select onchange="updateHours('${h.id}',{opportunityId:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px;max-width:160px"><option value="">—</option>${opts.map(o => `<option value="${o.id}" ${h.opportunityId===o.id?'selected':''}>${escapeHtml(o.title)}</option>`).join('')}</select></td>
+          <td style="padding:5px"><input type="number" step="0.25" value="${escapeHtml(h.hours)}" oninput="updateHours('${h.id}',{hours:this.value})" style="width:70px;padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px;text-align:right"></td>
+          <td style="padding:5px"><input type="text" value="${escapeHtml(h.notes)}" oninput="updateHours('${h.id}',{notes:this.value})" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px;text-align:right"><button class="btn btn-outline" style="padding:4px 8px;font-size:11px" onclick="if(confirm('Delete?'))deleteHours('${h.id}'); navigate('hours')">✕</button></td>
+        </tr>`).join('')}</tbody></table>` : '<div class="empty-state">No hours logged yet.</div>'}
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  SCREENING
+// ═════════════════════════════════════════════
+function renderScreening(){
+  const t = teamData(); if (!t){ document.getElementById('page-screening').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const ss = t.screenings || []; const vs = t.volunteers || [];
+  document.getElementById('page-screening').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Screening & Background Checks</h1><div class="page-sub">${ss.length} screening${ss.length===1?'':'s'} on record</div></div>
+      <div><button class="btn btn-teal" onclick="createScreening(); navigate('screening')">+ Request Screening</button></div>
+    </div>
+    <div class="callout tip" style="background:#e6f4f1;border-left:4px solid var(--teal);padding:14px 18px;border-radius:8px;margin-bottom:18px;font-size:13px"><b>Why this matters:</b> Required for any role involving children, elderly, money handling, or driving on behalf of the organization. Failure to screen is a top liability exposure for nonprofits. Renewals typically every 3 years.</div>
+    <div class="section">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:var(--light)">
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Volunteer</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Type</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Requested</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Completed</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Expires</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Status</th>
+          <th></th>
+        </tr></thead>
+        <tbody>${ss.map(s => `<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:5px"><select onchange="updateScreening('${s.id}',{volunteerId:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px;max-width:160px"><option value="">—</option>${vs.map(v => `<option value="${v.id}" ${s.volunteerId===v.id?'selected':''}>${escapeHtml(v.firstName+' '+v.lastName)}</option>`).join('')}</select></td>
+          <td style="padding:5px"><select onchange="updateScreening('${s.id}',{type:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px">${SCREENING_TYPES.map(o => `<option ${s.type===o?'selected':''}>${o}</option>`).join('')}</select></td>
+          <td style="padding:5px"><input type="date" value="${escapeHtml(s.requestedDate||'')}" oninput="updateScreening('${s.id}',{requestedDate:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><input type="date" value="${escapeHtml(s.completedDate||'')}" oninput="updateScreening('${s.id}',{completedDate:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><input type="date" value="${escapeHtml(s.expiresDate||'')}" oninput="updateScreening('${s.id}',{expiresDate:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><select onchange="updateScreening('${s.id}',{status:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px">${SCREENING_STATUS.map(o => `<option value="${o}" ${s.status===o?'selected':''}>${o.replace('_',' ')}</option>`).join('')}</select></td>
+          <td style="padding:5px;text-align:right"><button class="btn btn-outline" style="padding:4px 8px;font-size:11px" onclick="if(confirm('Delete?'))deleteScreening('${s.id}'); navigate('screening')">✕</button></td>
+        </tr>`).join('') || '<tr><td colspan="7" style="padding:30px;text-align:center;color:var(--muted)">No screenings yet.</td></tr>'}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  TRAINING
+// ═════════════════════════════════════════════
+function renderTraining(){
+  const t = teamData(); if (!t){ document.getElementById('page-training').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const trs = t.trainings || []; const vs = t.volunteers || [];
+  document.getElementById('page-training').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Training & Certifications</h1><div class="page-sub">${trs.length} record${trs.length===1?'':'s'}</div></div>
+      <div><button class="btn btn-teal" onclick="createTraining(); navigate('training')">+ Add Training Record</button></div>
+    </div>
+    <div class="section">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:var(--light)">
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Volunteer</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Training</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Completed</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Expires</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Certificate</th>
+          <th></th>
+        </tr></thead>
+        <tbody>${trs.map(tr => `<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:5px"><select onchange="updateTraining('${tr.id}',{volunteerId:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px;max-width:160px"><option value="">—</option>${vs.map(v => `<option value="${v.id}" ${tr.volunteerId===v.id?'selected':''}>${escapeHtml(v.firstName+' '+v.lastName)}</option>`).join('')}</select></td>
+          <td style="padding:5px"><select onchange="updateTraining('${tr.id}',{type:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px">${TRAINING_TYPES.map(o => `<option ${tr.type===o?'selected':''}>${o}</option>`).join('')}</select></td>
+          <td style="padding:5px"><input type="date" value="${escapeHtml(tr.completedDate||'')}" oninput="updateTraining('${tr.id}',{completedDate:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><input type="date" value="${escapeHtml(tr.expiresDate||'')}" oninput="updateTraining('${tr.id}',{expiresDate:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><input type="text" value="${escapeHtml(tr.certificateUrl)}" oninput="updateTraining('${tr.id}',{certificateUrl:this.value})" placeholder="Link or location" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px;text-align:right"><button class="btn btn-outline" style="padding:4px 8px;font-size:11px" onclick="if(confirm('Delete?'))deleteTraining('${tr.id}'); navigate('training')">✕</button></td>
+        </tr>`).join('') || '<tr><td colspan="6" style="padding:30px;text-align:center;color:var(--muted)">No training records yet.</td></tr>'}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  RISK & INCIDENTS
+// ═════════════════════════════════════════════
+function renderRisk(){
+  const t = teamData(); if (!t){ document.getElementById('page-risk').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const incs = t.incidents || []; const vs = t.volunteers || [];
+  document.getElementById('page-risk').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Risk & Incident Tracking</h1><div class="page-sub">${incs.length} incident${incs.length===1?'':'s'} on record</div></div>
+      <div><button class="btn btn-teal" onclick="createIncident(); navigate('risk')">+ Log Incident</button></div>
+    </div>
+    <div class="callout tip" style="background:#fff7d6;border-left:4px solid var(--gold);padding:14px 18px;border-radius:8px;margin-bottom:18px;font-size:13px"><b>Why log every incident:</b> Even minor incidents (a slip, a near-miss, a complaint) should be documented immediately. Pattern detection and insurance claim support depend on contemporaneous records. Severity scale: Low = no injury, Medium = minor injury/treatment, High = significant injury/property damage, Critical = serious injury/legal exposure.</div>
+    ${incs.map(i => `<div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:10px">
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:700;color:var(--navy)">${escapeHtml(i.description.slice(0,80)||'(incident)')}${i.description.length>80?'…':''}</div>
+          <div style="font-size:12px;color:var(--muted)">${fmtDate(i.date)} · severity: <b>${escapeHtml(i.severity)}</b>${i.resolved?' · <span style="color:var(--green)">resolved</span>':' · <span style="color:#a86b00">open</span>'}</div>
+        </div>
+        <button class="btn btn-outline" style="padding:5px 9px;font-size:11px" onclick="if(confirm('Delete?'))deleteIncident('${i.id}'); navigate('risk')">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+        <div class="field"><label>Date</label><input type="date" value="${escapeHtml(i.date||'')}" oninput="updateIncident('${i.id}',{date:this.value})"></div>
+        <div class="field"><label>Volunteer involved</label><select onchange="updateIncident('${i.id}',{volunteerId:this.value})"><option value="">—</option>${vs.map(v => `<option value="${v.id}" ${i.volunteerId===v.id?'selected':''}>${escapeHtml(v.firstName+' '+v.lastName)}</option>`).join('')}</select></div>
+        <div class="field"><label>Severity</label><select onchange="updateIncident('${i.id}',{severity:this.value})">${INCIDENT_SEVERITY.map(o => `<option ${i.severity===o?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div class="field"><label>Reported by</label><input type="text" value="${escapeHtml(i.reportedBy)}" oninput="updateIncident('${i.id}',{reportedBy:this.value})"></div>
+        <div class="field"><label>Resolved?</label><div style="display:flex;align-items:center;padding-top:6px"><input type="checkbox" ${i.resolved?'checked':''} onchange="updateIncident('${i.id}',{resolved:this.checked})"> <span style="margin-left:5px;font-size:13px">Yes</span></div></div>
+      </div>
+      <div class="field"><label>Description</label><textarea oninput="updateIncident('${i.id}',{description:this.value})" style="min-height:60px" placeholder="What happened? Be specific and factual.">${escapeHtml(i.description)}</textarea></div>
+      <div class="field"><label>Actions taken / Resolution</label><textarea oninput="updateIncident('${i.id}',{actions:this.value})" style="min-height:60px">${escapeHtml(i.actions)}</textarea></div>
+    </div>`).join('') || '<div class="empty-state">No incidents logged. Good.</div>'}
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  COMMUNICATIONS
+// ═════════════════════════════════════════════
+function renderComms(){
+  const t = teamData(); if (!t){ document.getElementById('page-comms').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const log = (t.comms||[]).slice().sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  const tpls = t.commTemplates || [];
+  document.getElementById('page-comms').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Communications</h1><div class="page-sub">${log.length} log entries · ${tpls.length} message templates</div></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" onclick="createCommTemplate(); navigate('comms')">+ New Template</button>
+        <button class="btn btn-teal" onclick="logComm(); navigate('comms')">+ Log Communication</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Message Templates <span class="badge badge-grey">${tpls.length}</span></div>
+      ${tpls.map(c => `<div style="background:var(--light);padding:14px;border-radius:8px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px">
+          <input type="text" value="${escapeHtml(c.name)}" oninput="updateCommTemplate('${c.id}',{name:this.value})" placeholder="Template name" style="font-size:14px;font-weight:700;color:var(--navy);border:none;background:transparent;padding:0;flex:1">
+          <button class="btn btn-outline" style="padding:4px 9px;font-size:11px" onclick="if(confirm('Delete?'))deleteCommTemplate('${c.id}'); navigate('comms')">✕</button>
+        </div>
+        <div class="field"><label>Subject</label><input type="text" value="${escapeHtml(c.subject)}" oninput="updateCommTemplate('${c.id}',{subject:this.value})"></div>
+        <div class="field"><label>Body</label><textarea oninput="updateCommTemplate('${c.id}',{body:this.value})" style="min-height:120px">${escapeHtml(c.body)}</textarea></div>
+      </div>`).join('') || '<div class="empty-state" style="padding:20px">No templates yet.</div>'}
+    </div>
+    <div class="section">
+      <div class="section-title">Communication Log <span class="badge badge-blue">${log.length}</span></div>
+      ${log.length ? `<table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:var(--light)">
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Date</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Channel</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Recipients</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Subject / Summary</th>
+          <th style="padding:8px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase">Sender</th>
+          <th></th>
+        </tr></thead>
+        <tbody>${log.map(c => `<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:5px"><input type="date" value="${escapeHtml(c.date||'')}" oninput="updateComm('${c.id}',{date:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><select onchange="updateComm('${c.id}',{channel:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px">${COMMS_CHANNELS.map(ch => `<option ${c.channel===ch?'selected':''}>${ch}</option>`).join('')}</select></td>
+          <td style="padding:5px"><input type="text" value="${escapeHtml(c.recipients)}" oninput="updateComm('${c.id}',{recipients:this.value})" placeholder="All active / a group / individual" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><input type="text" value="${escapeHtml(c.subject)}" oninput="updateComm('${c.id}',{subject:this.value})" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px"><input type="text" value="${escapeHtml(c.sender)}" oninput="updateComm('${c.id}',{sender:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></td>
+          <td style="padding:5px;text-align:right"><button class="btn btn-outline" style="padding:4px 8px;font-size:11px" onclick="if(confirm('Delete?'))deleteComm('${c.id}'); navigate('comms')">✕</button></td>
+        </tr>`).join('')}</tbody></table>` : '<div class="empty-state">No communications logged yet.</div>'}
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  RECOGNITION
+// ═════════════════════════════════════════════
+function renderRecognition(){
+  const t = teamData(); if (!t){ document.getElementById('page-recognition').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const vs = t.volunteers || [];
+  const log = t.recognitionLog || [];
+  // Compute milestone status for each volunteer
+  const milestoneRows = vs.map(v => {
+    const hrs = totalHoursForVolunteer(v.id);
+    const earned = getMilestonesEarned(hrs);
+    const next = getNextMilestone(hrs);
+    return { v, hrs, earned, next };
+  }).sort((a,b) => b.hrs - a.hrs);
+
+  document.getElementById('page-recognition').innerHTML = `
+    <div class="page-header">
+      <div><h1 class="page-title">Recognition</h1><div class="page-sub">${log.length} recognition entries · ${milestoneRows.filter(m => m.earned.length).length} volunteers at milestone tier</div></div>
+      <div><button class="btn btn-teal" onclick="createRecognition(); navigate('recognition')">+ New Recognition</button></div>
+    </div>
+    <div class="callout tip" style="background:#e6f4f1;border-left:4px solid var(--teal);padding:14px 18px;border-radius:8px;margin-bottom:18px;font-size:13px">Milestones unlock automatically based on logged hours. Surface them in newsletters, social media posts, anniversary cards, or your annual report. Generic "thank you" loses impact; specific recognition tied to actual work creates retention.</div>
+    <div class="section">
+      <div class="section-title">Milestone Progress</div>
+      ${milestoneRows.map(({v, hrs, earned, next}) => `<div style="background:var(--light);padding:12px;border-radius:8px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy)">${escapeHtml(v.firstName+' '+v.lastName)} <span style="color:var(--muted);font-weight:400;font-size:12px">· ${hrs.toFixed(1)} hrs</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${earned.length ? 'Earned: '+earned.map(m => m.icon+' '+m.label).join(' · ') : 'No milestones yet'}</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);text-align:right">${next ? `Next: ${next.icon} ${next.label} · ${(next.hours-hrs).toFixed(0)} hrs to go` : '<span style="color:var(--green)">All milestones earned!</span>'}</div>
+      </div>`).join('') || '<div class="empty-state">No volunteers yet.</div>'}
+    </div>
+    <div class="section">
+      <div class="section-title">Recognition Log</div>
+      ${log.map(r => {
+        const v = vs.find(x => x.id === r.volunteerId);
+        return `<div style="background:#fff;padding:14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px">
+            <div style="font-size:14px;font-weight:600;color:var(--navy)">${v?escapeHtml(v.firstName+' '+v.lastName):'(no volunteer)'} <span style="color:var(--muted);font-weight:400;font-size:12px">· ${fmtDate(r.date)}</span></div>
+            <button class="btn btn-outline" style="padding:4px 8px;font-size:11px" onclick="if(confirm('Delete?'))deleteRecognition('${r.id}'); navigate('recognition')">✕</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">
+            <div class="field" style="margin:0"><label>Volunteer</label><select onchange="updateRecognition('${r.id}',{volunteerId:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"><option value="">—</option>${vs.map(vv => `<option value="${vv.id}" ${r.volunteerId===vv.id?'selected':''}>${escapeHtml(vv.firstName+' '+vv.lastName)}</option>`).join('')}</select></div>
+            <div class="field" style="margin:0"><label>Type</label><select onchange="updateRecognition('${r.id}',{type:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px">${['Milestone','Spotlight','Annual Award','Anniversary','Special Thanks'].map(o => `<option ${r.type===o?'selected':''}>${o}</option>`).join('')}</select></div>
+            <div class="field" style="margin:0"><label>Date</label><input type="date" value="${escapeHtml(r.date||'')}" oninput="updateRecognition('${r.id}',{date:this.value})" style="padding:5px;border:1px solid var(--border);border-radius:6px;font-size:12px"></div>
+            <div class="field" style="margin:0"><label>Public Spotlight?</label><div style="padding-top:6px"><input type="checkbox" ${r.publicSpotlight?'checked':''} onchange="updateRecognition('${r.id}',{publicSpotlight:this.checked})"> Yes</div></div>
+          </div>
+          <div class="field"><label>Description</label><textarea oninput="updateRecognition('${r.id}',{description:this.value})" style="min-height:50px">${escapeHtml(r.description)}</textarea></div>
+        </div>`;
+      }).join('') || '<div class="empty-state">No recognition entries yet.</div>'}
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  REPORTS
+// ═════════════════════════════════════════════
+function renderReports(){
+  const t = teamData(); if (!t){ document.getElementById('page-reports').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const vs = t.volunteers || [];
+  const log = t.hoursLog || [];
+  const opts = t.opportunities || [];
+  const totalHours = log.reduce((s,h) => s + (parseFloat(h.hours)||0), 0);
+  const activeCount = vs.filter(v => v.status === 'active').length;
+  const totalGroupHours = (t.groups||[]).reduce((s,g) => s + (parseFloat(g.totalHours)||0), 0);
+
+  // Hours by opportunity
+  const byOpp = {};
+  log.forEach(h => { byOpp[h.opportunityId] = (byOpp[h.opportunityId]||0) + (parseFloat(h.hours)||0); });
+  const maxOppHrs = Math.max(...Object.values(byOpp), 1);
+
+  // Hours by volunteer (top 10)
+  const byVol = {};
+  log.forEach(h => { byVol[h.volunteerId] = (byVol[h.volunteerId]||0) + (parseFloat(h.hours)||0); });
+  const topVols = Object.entries(byVol).map(([id, hrs]) => ({ id, hrs, v: vs.find(v => v.id === id) })).filter(x => x.v).sort((a,b) => b.hrs - a.hrs).slice(0, 10);
+
+  document.getElementById('page-reports').innerHTML = `
+    <div class="page-header"><div><h1 class="page-title">Volunteer Reports</h1><div class="page-sub">For grants, board, annual reports</div></div></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Total individual hours</div><div class="stat-num">${totalHours.toFixed(0)}</div><div class="stat-sub">${log.length} entries logged</div></div>
+      <div class="stat-card"><div class="stat-label">Group hours (corp/school)</div><div class="stat-num">${totalGroupHours.toFixed(0)}</div><div class="stat-sub">${(t.groups||[]).length} group engagements</div></div>
+      <div class="stat-card"><div class="stat-label">Active volunteers</div><div class="stat-num">${activeCount}</div><div class="stat-sub">${vs.length} total roster</div></div>
+      <div class="stat-card"><div class="stat-label">Total volunteer hours</div><div class="stat-num">${(totalHours+totalGroupHours).toFixed(0)}</div><div class="stat-sub">individual + group</div></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Hours by Opportunity</div>
+      <div class="bar-chart">${opts.filter(o => byOpp[o.id]).sort((a,b) => (byOpp[b.id]||0)-(byOpp[a.id]||0)).map(o => {
+        const h = byOpp[o.id] || 0;
+        const pct = Math.round((h/maxOppHrs)*100);
+        return `<div class="bar-row"><div class="bar-label">${escapeHtml(o.title)}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%">${pct>15?h.toFixed(0)+' hrs':''}</div></div><div class="bar-meta">${h.toFixed(0)} hrs</div></div>`;
+      }).join('') || '<div class="empty-state">No hours logged yet.</div>'}</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Top Volunteers (lifetime hours)</div>
+      ${topVols.length ? `<table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr style="background:var(--light)"><th style="padding:8px;text-align:left">Volunteer</th><th style="padding:8px;text-align:right">Hours</th><th style="padding:8px;text-align:left">Milestones</th></tr></thead>
+        <tbody>${topVols.map(({hrs, v}) => `<tr style="border-bottom:1px solid var(--border)"><td style="padding:8px;font-weight:600;color:var(--navy)">${escapeHtml(v.firstName+' '+v.lastName)}</td><td style="padding:8px;text-align:right">${hrs.toFixed(1)}</td><td style="padding:8px;color:var(--muted)">${getMilestonesEarned(hrs).map(m => m.icon+' '+m.label).join(' · ')}</td></tr>`).join('')}</tbody>
+      </table>` : '<div class="empty-state">No data yet.</div>'}
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  SETTINGS
+// ═════════════════════════════════════════════
+function renderSettings(){
+  const u = currentUser(); const t = currentTeam();
+  const p = (t && t.profile) || {};
+  const showEdit = (isLeader() || isSuperAdmin()) && t;
+  document.getElementById('page-settings').innerHTML = `
+    <div class="page-header"><div><h1 class="page-title">Settings</h1><div class="page-sub">Organization profile and account</div></div></div>
+    ${t ? `<div class="settings-card">
+      <div class="section-title" style="margin-bottom:10px">Organization Profile</div>
+      <div class="settings-row"><div class="settings-label">Name</div><div class="settings-value">${escapeHtml(p.orgName||'—')}</div></div>
+      <div class="settings-row"><div class="settings-label">Team Code</div><div class="settings-value"><code style="font-family:'Courier New',monospace;background:var(--light);padding:2px 8px;border-radius:4px">${escapeHtml(t.id)}</code></div></div>
+      <div class="settings-row"><div class="settings-label">Plan</div><div class="settings-value">${t.isPro?'✓ Pro':'Free (3 seats)'}</div></div>
+      <div class="settings-row"><div class="settings-label">Volunteers</div><div class="settings-value">${(t.volunteers||[]).length}</div></div>
+      ${showEdit?'<div style="margin-top:14px"><button class="btn btn-outline" onclick="startOnboarding()">Edit organization →</button></div>':''}
+    </div>`:''}
+    <div class="settings-card">
+      <div class="section-title" style="margin-bottom:10px">Account</div>
+      <div class="settings-row"><div class="settings-label">Name</div><div class="settings-value">${escapeHtml(u.name)}${u.isSuperAdmin?' · super-admin':''}</div></div>
+      <div class="settings-row"><div class="settings-label">Email</div><div class="settings-value">${escapeHtml(state.currentEmail)}</div></div>
+      <div style="margin-top:14px"><button class="btn btn-outline" onclick="signOut()">Sign out</button></div>
+    </div>
+    <div class="settings-card">
+      <div class="section-title" style="margin-bottom:10px">Reset Demo</div>
+      <button class="btn btn-outline" onclick="if(confirm('Clear all demo data?')){localStorage.removeItem('bya_volunteers_v1');location.reload();}">Reset all demo data</button>
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  BUILD ANNUAL VOLUNTEER REPORT
+// ═════════════════════════════════════════════
+function buildReportHTML(){
+  const t = teamData(); if (!t) return '';
+  const orgName = t.profile.orgName || '[Organization]';
+  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const vs = t.volunteers || []; const log = t.hoursLog || []; const opts = t.opportunities || [];
+  const gs = t.groups || [];
+  const totalIndHours = log.reduce((s,h) => s + (parseFloat(h.hours)||0), 0);
+  const totalGrpHours = gs.reduce((s,g) => s + (parseFloat(g.totalHours)||0), 0);
+  const total = totalIndHours + totalGrpHours;
+  const activeCount = vs.filter(v => v.status === 'active').length;
+  // Independent Sector value of volunteer time (placeholder rate)
+  const VALUE_PER_HOUR = 33.49;
+  const value = total * VALUE_PER_HOUR;
+
+  const byOpp = {};
+  log.forEach(h => { byOpp[h.opportunityId] = (byOpp[h.opportunityId]||0) + (parseFloat(h.hours)||0); });
+
+  const milestoneVols = vs.map(v => ({ v, hrs: totalHoursForVolunteer(v.id) })).filter(x => x.hrs >= 25).sort((a,b) => b.hrs - a.hrs);
+
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${escapeHtml(orgName)} — Volunteer Report</title>
+<style>body{font-family:Georgia,serif;color:#1a1a2e;line-height:1.55;max-width:780px;margin:40px auto;padding:0 40px}h1{font-size:30px;color:#1B3A5C;border-bottom:3px solid #1B3A5C;padding-bottom:10px;margin-top:36px}h2{font-size:22px;color:#1B3A5C;margin-top:32px;border-bottom:1px solid #ccc;padding-bottom:6px}.cover{text-align:center;padding:60px 0;border-bottom:2px solid #1B3A5C;margin-bottom:50px}.cover h1{font-size:36px;border:none}.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}.kpi-card{background:#f0f4f8;padding:16px;border-radius:10px;text-align:center}.kpi-num{font-size:28px;font-weight:700;color:#1B3A5C}.kpi-lbl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:13px}.tbl th,.tbl td{padding:8px 10px;text-align:left;border-bottom:1px solid #e2e8f0}.tbl th{background:#f0f4f8;color:#1B3A5C;font-weight:700}@page{margin:1in}</style></head><body>
+<div class="cover"><h1>${escapeHtml(orgName)}</h1><div style="font-size:18px;color:#2A7B6F">VOLUNTEER REPORT</div><div style="margin-top:60px;color:#64748b;font-size:13px">Prepared ${today}</div></div>
+
+<h1>By the Numbers</h1>
+<div class="kpi">
+  <div class="kpi-card"><div class="kpi-num">${total.toFixed(0)}</div><div class="kpi-lbl">Total Hours</div></div>
+  <div class="kpi-card"><div class="kpi-num">${activeCount}</div><div class="kpi-lbl">Active Volunteers</div></div>
+  <div class="kpi-card"><div class="kpi-num">${gs.length}</div><div class="kpi-lbl">Group Engagements</div></div>
+  <div class="kpi-card"><div class="kpi-num">$${(value/1000).toFixed(0)}K</div><div class="kpi-lbl">Estimated Value</div></div>
+</div>
+<p style="font-size:12px;color:#64748b;font-style:italic">Estimated value calculated at $${VALUE_PER_HOUR.toFixed(2)}/hr (Independent Sector national average).</p>
+
+<h1>Hours by Program</h1>
+<table class="tbl"><thead><tr><th>Opportunity</th><th style="text-align:right">Hours</th></tr></thead>
+<tbody>${opts.filter(o => byOpp[o.id]).sort((a,b) => (byOpp[b.id]||0)-(byOpp[a.id]||0)).map(o => `<tr><td>${escapeHtml(o.title)}</td><td style="text-align:right">${(byOpp[o.id]||0).toFixed(1)}</td></tr>`).join('') || '<tr><td colspan="2"><em>No hours logged.</em></td></tr>'}</tbody></table>
+
+<h1>Volunteers at Milestone Tier</h1>
+${milestoneVols.length ? `<table class="tbl"><thead><tr><th>Volunteer</th><th style="text-align:right">Lifetime Hours</th><th>Milestones</th></tr></thead>
+<tbody>${milestoneVols.map(({v, hrs}) => `<tr><td>${escapeHtml(v.firstName+' '+v.lastName)}</td><td style="text-align:right">${hrs.toFixed(0)}</td><td>${getMilestonesEarned(hrs).map(m => m.icon+' '+m.label).join(' · ')}</td></tr>`).join('')}</tbody></table>` : '<p><em>No volunteers at milestone tier yet.</em></p>'}
+
+<h1>Group Engagements</h1>
+${gs.length ? `<table class="tbl"><thead><tr><th>Organization</th><th>Date</th><th>Project</th><th style="text-align:right">Hours</th></tr></thead>
+<tbody>${gs.map(g => `<tr><td>${escapeHtml(g.orgName)}</td><td>${fmtDate(g.date)}</td><td>${escapeHtml(g.project)}</td><td style="text-align:right">${escapeHtml(g.totalHours)}</td></tr>`).join('')}</tbody></table>` : '<p><em>No group engagements yet.</em></p>'}
+
+<p style="margin-top:60px;text-align:center;color:#64748b;font-size:11px">${escapeHtml(orgName)} · Volunteer Report · ${today}</p>
+</body></html>`;
+}
+
+function previewReport(){ const h = buildReportHTML(); if (!h) return; const w = window.open('', '_blank'); w.document.write(h); w.document.close(); }
+function downloadReportHTML(){ const h = buildReportHTML(); if (!h) return; const n = (currentTeam().profile.orgName||'Volunteer_Report').replace(/[^a-z0-9]+/gi,'_'); const blob = new Blob([h],{type:'text/html'}); const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = n + '_Volunteer_Report.html'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),1000); }
+
+let docxLibLoaded = null;
+function ensureDocxLib(){
+  if (docxLibLoaded) return docxLibLoaded;
+  docxLibLoaded = new Promise((resolve, reject) => {
+    if (window.docx){ resolve(); return; }
+    const s = document.createElement('script'); s.src = 'https://unpkg.com/docx@8.5.0/build/index.umd.min.js';
+    s.onload = () => resolve(); s.onerror = () => { docxLibLoaded = null; reject(new Error('failed')); };
+    document.head.appendChild(s);
+  });
+  return docxLibLoaded;
+}
+async function downloadReportDocx(){
+  const t = teamData(); if (!t) return;
+  const btn = document.getElementById('build-docx-btn');
+  if (btn){ btn.disabled = true; btn.textContent = 'Loading…'; }
+  try { await ensureDocxLib(); } catch(e){ alert('Could not load docx library. Use HTML download.'); if(btn){btn.disabled=false;btn.textContent='⬇ Download .docx';} return; }
+  if (btn) btn.textContent = 'Generating…';
+  const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, PageBreak } = window.docx;
+  const orgName = t.profile.orgName || '[Organization]';
+  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const vs = t.volunteers || []; const log = t.hoursLog || []; const opts = t.opportunities || []; const gs = t.groups || [];
+  const totalInd = log.reduce((s,h) => s + (parseFloat(h.hours)||0), 0);
+  const totalGrp = gs.reduce((s,g) => s + (parseFloat(g.totalHours)||0), 0);
+  const total = totalInd + totalGrp;
+  const value = total * 33.49;
+  const H1 = text => new Paragraph({ heading: HeadingLevel.HEADING_1, spacing:{before:400,after:120}, children:[new TextRun({ text, bold:true, color:'1B3A5C', size:32 })] });
+  const H2 = text => new Paragraph({ heading: HeadingLevel.HEADING_2, spacing:{before:280,after:80}, children:[new TextRun({ text, bold:true, color:'1B3A5C', size:24 })] });
+  const P = text => new Paragraph({ spacing:{after:120}, children:[new TextRun({ text: text||'', size:22 })] });
+  const PB = (l, v) => new Paragraph({ spacing:{after:60}, children:[new TextRun({text:l+' ',bold:true,size:22}),new TextRun({text:v||'—',size:22})] });
+  const sections = [];
+  sections.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{before:600,after:80}, children:[new TextRun({text:orgName,bold:true,size:48,color:'1B3A5C'})] }));
+  sections.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{after:120}, children:[new TextRun({text:'VOLUNTEER REPORT',size:28,color:'2A7B6F'})] }));
+  sections.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{before:400}, children:[new TextRun({text:'Prepared '+today,size:20,color:'64748B'})] }));
+  sections.push(new Paragraph({ children:[new PageBreak()] }));
+  sections.push(H1('By the Numbers'));
+  sections.push(PB('Total Hours:', total.toFixed(0)));
+  sections.push(PB('Individual Hours:', totalInd.toFixed(0)));
+  sections.push(PB('Group Hours:', totalGrp.toFixed(0)));
+  sections.push(PB('Active Volunteers:', String(vs.filter(v=>v.status==='active').length)));
+  sections.push(PB('Group Engagements:', String(gs.length)));
+  sections.push(PB('Estimated Value of Volunteer Time:', '$'+value.toLocaleString('en-US',{maximumFractionDigits:0})+' (at $33.49/hr Independent Sector rate)'));
+  sections.push(H1('Hours by Program'));
+  const byOpp = {};
+  log.forEach(h => { byOpp[h.opportunityId] = (byOpp[h.opportunityId]||0) + (parseFloat(h.hours)||0); });
+  opts.filter(o => byOpp[o.id]).sort((a,b) => (byOpp[b.id]||0)-(byOpp[a.id]||0)).forEach(o => sections.push(P(`${o.title}: ${(byOpp[o.id]||0).toFixed(1)} hours`)));
+  sections.push(H1('Group Engagements'));
+  gs.forEach(g => sections.push(P(`${g.orgName} — ${g.date||''} — ${g.project||''} — ${g.totalHours||0} hrs`)));
+  sections.push(H1('Volunteers at Milestone Tier'));
+  vs.map(v => ({v,hrs:totalHoursForVolunteer(v.id)})).filter(x=>x.hrs>=25).sort((a,b)=>b.hrs-a.hrs).forEach(({v,hrs}) => sections.push(P(`${v.firstName} ${v.lastName} — ${hrs.toFixed(0)} hours — ${getMilestonesEarned(hrs).map(m=>m.label).join(', ')}`)));
+  const doc = new Document({ creator:'Build Your Club Academy', title: orgName+' Volunteer Report', sections:[{properties:{}, children:sections}] });
+  const blob = await Packer.toBlob(doc);
+  const url = URL.createObjectURL(blob); const a = document.createElement('a');
+  a.href = url; a.download = orgName.replace(/[^a-z0-9]+/gi,'_') + '_Volunteer_Report.docx'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  if (btn){ btn.disabled = false; btn.textContent = '⬇ Download .docx'; }
+}
+
+function renderBuild(){
+  const t = teamData(); if (!t){ document.getElementById('page-build').innerHTML = '<div class="empty-state">No team.</div>'; return; }
+  const vs = t.volunteers || []; const log = t.hoursLog || []; const gs = t.groups || [];
+  const total = log.reduce((s,h) => s + (parseFloat(h.hours)||0), 0) + gs.reduce((s,g) => s + (parseFloat(g.totalHours)||0), 0);
+  document.getElementById('page-build').innerHTML = `
+    <div class="page-header"><div><h1 class="page-title">Build Annual Volunteer Report</h1><div class="page-sub">Assemble for the board, funders, or your annual report</div></div></div>
+    <div class="section">
+      <div class="section-title">Readiness</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Total hours captured</div><div class="stat-num">${total.toFixed(0)}</div></div>
+        <div class="stat-card"><div class="stat-label">Volunteers tracked</div><div class="stat-num">${vs.length}</div></div>
+        <div class="stat-card"><div class="stat-label">Group engagements</div><div class="stat-num">${gs.length}</div></div>
+        <div class="stat-card"><div class="stat-label">Estimated value</div><div class="stat-num">$${(total*33.49/1000).toFixed(0)}K</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Output</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Generates a polished volunteer report with totals, hours by program, group engagements, and milestone honorees.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-teal" onclick="previewReport()">👁️ Preview (HTML)</button>
+        <button class="btn btn-outline" onclick="downloadReportHTML()">⬇ Download .html</button>
+        <button class="btn btn-outline" id="build-docx-btn" onclick="downloadReportDocx()">⬇ Download .docx</button>
+      </div>
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  TEAM PAGE
+// ═════════════════════════════════════════════
+function renderTeam(){
+  const u = currentUser();
+  const t = currentTeam();
+  if (!t){ document.getElementById('page-team').innerHTML = '<div class="empty-state">No team selected.</div>'; return; }
+  const members = Object.entries(t.members||{}).map(([email, role]) => {
+    const usr = state.users[email];
+    return { email, role, name: (usr && usr.name) || email };
+  });
+  const leaderCount = members.filter(m => m.role === 'leader').length;
+  const seatLimit = t.isPro ? '∞' : '3';
+  const canInvite = isLeader() && (t.isPro || members.length < 3);
+
+  const memberRow = (m) => `
+    <div class="team-member-row">
+      <div class="user-avatar">${(m.name||'?').charAt(0).toUpperCase()}</div>
+      <div class="team-member-info">
+        <div class="team-member-name">${m.name} ${m.email===state.currentEmail?'<span style="color:var(--muted);font-weight:400">(you)</span>':''}</div>
+        <div class="team-member-email">${m.email}</div>
+      </div>
+      <span class="role-pill role-${m.role}">${m.role}</span>
+      ${isLeader() && m.role!=='leader' && m.email!==state.currentEmail ? `<button class="btn btn-outline" style="padding:6px 12px;font-size:12px" onclick="removeMember('${m.email}')">Remove</button>` : ''}
+    </div>`;
+
+  document.getElementById('page-team').innerHTML = `
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Team</h1>
+        <div class="page-sub">${members.length} member${members.length===1?'':'s'} · ${seatLimit} seat${seatLimit==='1'?'':'s'} available</div>
+      </div>
+    </div>
+    ${isLeader() ? `
+      <div class="team-code-display">
+        <div class="team-code-label">Invite teammates with this code</div>
+        <div class="team-code-value" id="tc-val">${t.id}</div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:14px">
+          <button class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.2)" onclick="copyTeamCode()">📋 Copy</button>
+          <button class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.2)" onclick="regenerateTeamCode()">🔄 New code</button>
+        </div>
+      </div>` : `
+      <div class="disclaimer" style="background:#dbeafe;border-color:#94c3ff;color:var(--navy)"><b>You're a member of this team.</b> The team leader can invite others. You can update filing statuses and see all the team's compliance items.</div>`}
+    <div class="section">
+      <div class="section-title">Members <span class="badge badge-grey">${members.length} / ${seatLimit}</span></div>
+      ${members.map(memberRow).join('')}
+      ${!t.isPro && members.length >= 3 ? `<div style="margin-top:14px;padding:14px;background:#fff7d6;border:1px solid #f5d77f;border-radius:10px;font-size:13px;color:#5c4400"><b>Free plan limit reached.</b> Upgrade to Pro for unlimited team seats. <a onclick="openUpgradeModal()" style="color:var(--navy);font-weight:600;cursor:pointer">View Pro →</a></div>` : ''}
+    </div>
+  `;
+}
+function copyTeamCode(){
+  const t = currentTeam(); if (!t) return;
+  navigator.clipboard.writeText(t.id).then(()=>alert('Team code copied: '+t.id), ()=>alert('Copy failed — code is '+t.id));
+}
+function regenerateTeamCode(){
+  if (!confirm('Generate a new team code? The old code will stop working for new invitations. Existing members are not affected.')) return;
+  const t = currentTeam(); if (!t || !isLeader()) return;
+  // Move team to new code
+  const newCode = generateTeamCode();
+  state.teams[newCode] = { ...t, id: newCode };
+  delete state.teams[t.id];
+  // Update all members' teamId
+  Object.keys(state.teams[newCode].members).forEach(email => {
+    if (state.users[email]) state.users[email].teamId = newCode;
+  });
+  save();
+  renderTeam();
+}
+function removeMember(email){
+  if (!confirm('Remove this team member? They will lose access immediately.')) return;
+  const t = currentTeam(); if (!t || !isLeader()) return;
+  delete t.members[email];
+  if (state.users[email]) state.users[email].teamId = null;
+  logHistory({ type:'member_removed', who: email, itemName: 'Team member removed' });
+  save();
+  renderTeam();
+}
+
+// ═════════════════════════════════════════════
+//  HISTORY PAGE
+// ═════════════════════════════════════════════
+const STATUS_LABEL = { not_started:'Not started', in_progress:'In progress', filed:'Filed ✓', na:'N/A' };
+const STATUS_COLOR = { not_started:'badge-grey', in_progress:'badge-amber', filed:'badge-green', na:'badge-blue' };
+
+function renderHistory(){
+  const t = currentTeam();
+  if (!t){ document.getElementById('page-history').innerHTML = '<div class="empty-state">No team selected.</div>'; return; }
+  const history = t.history || [];
+  const fmtDate = (iso) => { try { return new Date(iso).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); } catch(e){ return iso; } };
+  const userLabel = (email) => { const u = state.users[email]; return u ? u.name : email; };
+
+  const row = (e) => {
+    if (e.type === 'status_change'){
+      return `<div class="hist-row">
+        <div class="hist-when">${fmtDate(e.when)}</div>
+        <div class="hist-who">${userLabel(e.by)}</div>
+        <div class="hist-what">marked <b>${e.itemName}</b> as <span class="hist-status-chip ${STATUS_COLOR[e.newStatus]}">${STATUS_LABEL[e.newStatus]||e.newStatus}</span></div>
+      </div>`;
+    }
+    if (e.type === 'member_added' || e.type === 'member_joined'){
+      return `<div class="hist-row"><div class="hist-when">${fmtDate(e.when)}</div><div class="hist-who">${userLabel(e.by)}</div><div class="hist-what">${e.itemName||'Team change'}</div></div>`;
+    }
+    return `<div class="hist-row"><div class="hist-when">${fmtDate(e.when)}</div><div class="hist-who">${userLabel(e.by)}</div><div class="hist-what">${e.itemName||e.type}</div></div>`;
+  };
+
+  document.getElementById('page-history').innerHTML = `
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Activity History</h1>
+        <div class="page-sub">${history.length} event${history.length===1?'':'s'} · capped at 200 · useful for board reporting and audit trail</div>
+      </div>
+    </div>
+    <div class="section">
+      ${history.length ? history.map(row).join('') : '<div class="empty-state">No activity yet. Status changes and team events will appear here.</div>'}
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  ANALYTICS PAGE
+// ═════════════════════════════════════════════
+function renderAnalytics(){
+  const t = currentTeam();
+  if (!t){ document.getElementById('page-analytics').innerHTML = '<div class="empty-state">No team selected.</div>'; return; }
+  const items = compileItems();
+  if (!items.length){ document.getElementById('page-analytics').innerHTML = '<div class="empty-state">No items to analyze yet.</div>'; return; }
+
+  // Compliance score: % of items currently filed or N/A (excluding those due more than 60 days out)
+  const dueSoon = items.filter(i => daysUntil(i.due) <= 60);
+  const handled = dueSoon.filter(i => { const s = statusFor(i.id); return s==='filed' || s==='na'; });
+  const score = dueSoon.length ? Math.round((handled.length / dueSoon.length) * 100) : 100;
+
+  // On-time score: filed items / past-due items (items where due date already passed)
+  const pastDue = items.filter(i => daysUntil(i.due) < 0);
+  const pastDueFiled = pastDue.filter(i => statusFor(i.id)==='filed' || statusFor(i.id)==='na');
+  const onTime = pastDue.length ? Math.round((pastDueFiled.length / pastDue.length) * 100) : 100;
+
+  // Overdue count (current)
+  const overdueCount = items.filter(i => daysUntil(i.due) < 0 && statusFor(i.id) !== 'filed' && statusFor(i.id) !== 'na').length;
+
+  // Category breakdown
+  const cats = {};
+  items.forEach(i => {
+    cats[i.category] = cats[i.category] || { total:0, filed:0 };
+    cats[i.category].total++;
+    const s = statusFor(i.id);
+    if (s==='filed' || s==='na') cats[i.category].filed++;
+  });
+
+  const barRow = (label, filed, total) => {
+    const pct = total ? Math.round((filed/total)*100) : 0;
+    return `<div class="bar-row">
+      <div class="bar-label">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%">${pct>10?pct+'%':''}</div></div>
+      <div class="bar-meta">${filed}/${total}</div>
+    </div>`;
+  };
+
+  document.getElementById('page-analytics').innerHTML = `
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Compliance Analytics</h1>
+        <div class="page-sub">Health metrics for ${t.profile.orgName||'your organization'}</div>
+      </div>
+    </div>
+    <div class="score-card">
+      <div class="score-num">${score}%</div>
+      <div class="score-label">Current Compliance Score — filings due within 60 days that are filed or N/A</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">On-time historical</div><div class="stat-num">${onTime}%</div><div class="stat-sub">of past-due items were filed</div></div>
+      <div class="stat-card ${overdueCount>0?'alert':''}"><div class="stat-label">Currently overdue</div><div class="stat-num">${overdueCount}</div><div class="stat-sub">${overdueCount?'Action needed':'You\’re current'}</div></div>
+      <div class="stat-card"><div class="stat-label">Total filings tracked</div><div class="stat-num">${items.length}</div><div class="stat-sub">across all categories</div></div>
+      <div class="stat-card"><div class="stat-label">Activity events</div><div class="stat-num">${(t.history||[]).length}</div><div class="stat-sub">in your audit trail</div></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Completion by Category</div>
+      <div class="bar-chart">
+        ${Object.entries(cats).map(([name, c]) => barRow(name, c.filed, c.total)).join('')}
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Status Distribution</div>
+      <div class="bar-chart">
+        ${['not_started','in_progress','filed','na'].map(s => {
+          const count = items.filter(i => statusFor(i.id) === s).length;
+          return barRow(STATUS_LABEL[s], count, items.length);
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ═════════════════════════════════════════════
+//  ADMIN PAGE (super-admin only)
+// ═════════════════════════════════════════════
+function renderAdmin(){
+  if (!isSuperAdmin()){ document.getElementById('page-admin').innerHTML = '<div class="empty-state">Admin only.</div>'; return; }
+  const teams = Object.values(state.teams);
+  const userCount = Object.keys(state.users).length;
+  const proCount = teams.filter(t => t.isPro).length;
+  document.getElementById('page-admin').innerHTML = `
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Admin Console</h1>
+        <div class="page-sub">All teams and users across the demo</div>
+      </div>
+      ${state.adminViewingTeam ? `<button class="btn btn-outline" onclick="exitAdminView()">← Exit team view</button>` : ''}
+    </div>
+    <div class="admin-banner"><b>🔐 Super Admin:</b> ${currentUser().name}. You can view any team's compliance data and impersonate them for support purposes.</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Teams</div><div class="stat-num">${teams.length}</div><div class="stat-sub">organizations registered</div></div>
+      <div class="stat-card"><div class="stat-label">Users</div><div class="stat-num">${userCount}</div><div class="stat-sub">across all teams</div></div>
+      <div class="stat-card"><div class="stat-label">Pro plans</div><div class="stat-num">${proCount}</div><div class="stat-sub">of ${teams.length} total</div></div>
+    </div>
+    <div class="section">
+      <div class="section-title">All Teams</div>
+      ${teams.length ? teams.map(t => {
+        const leader = Object.entries(t.members||{}).find(([e,r]) => r==='leader');
+        const leaderEmail = leader ? leader[0] : '—';
+        const memberCount = Object.keys(t.members||{}).length;
+        return `<div class="admin-team" onclick="adminViewTeam('${t.id}')">
+          <div style="font-size:22px">🏛️</div>
+          <div class="admin-team-info">
+            <div class="admin-team-name">${t.profile && t.profile.orgName || '(unnamed org)'}</div>
+            <div class="admin-team-meta">Code: <b>${t.id}</b> · Leader: ${leaderEmail} · ${memberCount} member${memberCount===1?'':'s'} · ${STATES[t.profile && t.profile.state]||'—'} · ${t.isPro?'<span style="color:var(--teal);font-weight:600">PRO</span>':'Free'}</div>
+          </div>
+          <button class="btn btn-outline" style="padding:6px 14px;font-size:12px">View →</button>
+        </div>`;
+      }).join('') : '<div class="empty-state">No teams yet.</div>'}
+    </div>
+    <div class="section">
+      <div class="section-title">All Users</div>
+      ${Object.entries(state.users).map(([email, u]) => {
+        const tName = u.teamId && state.teams[u.teamId] ? (state.teams[u.teamId].profile.orgName || '(unnamed)') : '—';
+        return `<div class="team-member-row">
+          <div class="user-avatar">${(u.name||'?').charAt(0).toUpperCase()}</div>
+          <div class="team-member-info">
+            <div class="team-member-name">${u.name||email}${u.isSuperAdmin?' <span class="role-pill role-leader">ADMIN</span>':''}</div>
+            <div class="team-member-email">${email} · Team: ${tName}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+function adminViewTeam(tid){
+  if (!isSuperAdmin()) return;
+  state.adminViewingTeam = tid;
+  save();
+  bootApp();
+}
+function exitAdminView(){
+  state.adminViewingTeam = null;
+  save();
+  bootApp();
+}
+
+// ═════════════════════════════════════════════
+//  UPGRADE MODAL / PRO
+// ═════════════════════════════════════════════
+function openUpgradeModal(){
+  const t = currentTeam();
+  if (!t){ alert('Sign in to a team first.'); return; }
+  if (t.isPro){ alert('You\'re already on the Pro plan. Thanks!'); return; }
+  if (!isLeader()){ alert('Only the team leader can upgrade.'); return; }
+  document.getElementById('upgrade-modal').classList.remove('hidden');
+}
+function closeUpgradeModal(){
+  document.getElementById('upgrade-modal').classList.add('hidden');
+}
+function startProTrial(){
+  const t = currentTeam();
+  if (!t || !isLeader()){ closeUpgradeModal(); return; }
+  t.isPro = true;
+  t.isOnTrial = true;
+  const ends = new Date(); ends.setDate(ends.getDate() + 14);
+  t.trialEnds = ends.toISOString();
+  logHistory({ type:'pro_upgrade', itemName:'Upgraded to Pro (14-day trial)' });
+  save();
+  closeUpgradeModal();
+  updateProBadge();
+  alert('🎉 Pro trial activated! You have unlimited team seats for the next 14 days.');
+  if (document.querySelector('#nav-team.active')) renderTeam();
+}
+
+
+// ═════════════════════════════════════════════
+//  MOBILE SIDEBAR TOGGLE
+// ═════════════════════════════════════════════
+function toggleSidebar(){
+  document.querySelector('.sidebar')?.classList.toggle('open');
+  document.querySelector('.sidebar-backdrop')?.classList.toggle('show');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar')?.classList.remove('open');
+  document.querySelector('.sidebar-backdrop')?.classList.remove('show');
+}
+document.addEventListener('click', function(e){
+  if (window.innerWidth <= 768 && e.target.closest('.nav-item')){
+    closeSidebar();
+  }
+});
+
+// ═════════════════════════════════════════════
+//  BOOT
+// ═════════════════════════════════════════════
+load();
+seedDemo();
+if (state.currentEmail && state.users[state.currentEmail]){
+  routeAfterAuth();
+} else {
+  document.getElementById('screen-auth').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
