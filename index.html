@@ -1537,12 +1537,12 @@ function downloadReportHTML(){ const h = buildReportHTML(); if (!h) return; cons
 
 let docxLibLoaded = null;
 // SRI: paste sha384 hash for docx@8.5.0 to enable Subresource Integrity (see aaa_references/Documents/SRI-Hashes.html)
-const DOCX_LIB_INTEGRITY = 'sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb';
+const DOCX_LIB_INTEGRITY = '';
 function ensureDocxLib(){
   if (docxLibLoaded) return docxLibLoaded;
   docxLibLoaded = new Promise((resolve, reject) => {
     if (window.docx){ resolve(); return; }
-    const s = document.createElement('script'); s.src = 'https://unpkg.com/docx@8.5.0/build/index.umd.min.js';
+    const s = document.createElement('script'); s.src = 'https://unpkg.com/docx@8.5.0/build/index.umd.js';
     if (DOCX_LIB_INTEGRITY) { s.integrity = DOCX_LIB_INTEGRITY; s.crossOrigin = 'anonymous'; }
     s.onload = () => resolve(); s.onerror = () => { docxLibLoaded = null; reject(new Error('failed')); };
     document.head.appendChild(s);
@@ -1934,8 +1934,4 @@ seedDemo();
 if (state.currentEmail && state.users[state.currentEmail]){
   routeAfterAuth();
 } else {
-  document.getElementById('screen-auth').classList.remove('hidden');
-}
-</script>
-</body>
-</html>
+  document.getElementById(
