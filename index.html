@@ -7,18 +7,22 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a2e;font-size:14px;-webkit-font-smoothing:antialiased}
-:root{--navy:#1B3A5C;--teal:#2A7B6F;--gold:#D4A017;--red:#c0392b;--green:#2d7a4f;--bg:#f0f4f8;--white:#fff;--border:#e2e8f0;--text:#1a1a2e;--muted:#64748b;--light:#f8fafc}
+:root{--navy:#1B3A5C;--teal:#2563EB;--gold:#D4A017;--red:#c0392b;--green:#2d7a4f;--bg:#f0f4f8;--white:#fff;--border:#e2e8f0;--text:#1a1a2e;--muted:#64748b;--light:#f8fafc}
 .hidden{display:none!important}
 
 /* ── AUTH SCREENS ── */
-.auth-wrap{min-height:100vh;background:linear-gradient(135deg,var(--navy),var(--teal));display:flex;align-items:center;justify-content:center;padding:24px}
-.auth-card{background:var(--white);border-radius:24px;padding:40px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.auth-logo{width:48px;height:48px;background:var(--navy);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:700;margin:0 auto 20px}
-.auth-title{font-size:24px;font-weight:700;color:var(--navy);text-align:center;margin-bottom:6px}
-.auth-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px}
+.auth-wrap{position:fixed;inset:0;min-height:100vh;background:rgba(15,23,42,.92);display:flex;align-items:center;justify-content:center;padding:1rem;z-index:9999;overflow-y:auto}
+.auth-card{background:var(--white);border-radius:16px;padding:1.75rem 2rem;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.35);max-height:calc(100vh - 2rem);overflow-y:auto}
+.auth-logo{width:62px;height:62px;background:linear-gradient(135deg,#1e3a8a,#2563EB);border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;margin:0 auto 14px;box-shadow:0 4px 14px rgba(37,99,235,.35)}
+.auth-title{font-size:1.2rem;font-weight:800;color:var(--navy);text-align:center;margin-bottom:4px;line-height:1.3}
+.auth-sub{font-size:.78rem;color:var(--muted);text-align:center;margin-bottom:14px}
+.auth-free-note{display:flex;align-items:flex-start;gap:.45rem;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:.55rem .8rem;margin-bottom:.95rem;font-size:.78rem;color:#1e40af;line-height:1.45;text-align:left}
 .auth-tabs{display:flex;background:var(--light);border-radius:10px;padding:4px;margin-bottom:20px}
 .auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;border-radius:8px;color:var(--muted);transition:.15s}
 .auth-tab.active{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.auth-guide-link{text-align:center;margin-top:1rem;padding-top:.95rem;border-top:1px solid #e2e8f0}
+.auth-guide-link a{font-size:.82rem;color:#2563EB;text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:.35rem}
+.auth-guide-link a:hover{text-decoration:underline}
 .field{margin-bottom:16px}
 .field label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
 .field input,.field select,.field textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--text);background:#fff;font-family:inherit;transition:.15s}
@@ -263,6 +267,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .empty-state{padding:40px;text-align:center;color:var(--muted);font-size:13px}
 .disclaimer{background:#fff7d6;border:1px solid #f5d77f;border-radius:10px;padding:12px;font-size:12px;color:#5c4400;margin-bottom:20px;line-height:1.5}
 .disclaimer b{color:#3d2d00}
+
+.auth-side-links{text-align:center;margin-top:1rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+.auth-side-links a{font-size:.78rem;color:#9ca3af;text-decoration:none;cursor:pointer}
+.auth-side-links a:hover{color:#2563EB}
 </style>
 </head>
 <body>
@@ -270,25 +278,54 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- ════════════ AUTH ════════════ -->
 <div id="screen-auth" class="auth-wrap hidden">
   <div class="auth-card">
-    <div class="auth-logo">B</div>
-    <h1 class="auth-title">Build Your Club</h1>
-    <p class="auth-sub">Volunteer Coordination</p>
+    <div class="auth-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="9" width="18" height="12" rx="1"/>
+        <path d="M3 9l9-6 9 6"/>
+        <rect x="9" y="13" width="2.5" height="4" rx=".4"/>
+        <rect x="12.5" y="13" width="2.5" height="4" rx=".4"/>
+        <line x1="3" y1="21" x2="21" y2="21"/>
+        <line x1="12" y1="3" x2="12" y2="6"/>
+      </svg>
+    </div>
+    <h1 class="auth-title">Nonprofit Volunteer Management</h1>
+    <p class="auth-sub">Build Your Club, LLC &nbsp;|&nbsp; buildyourclubacademy.org</p>
+    <div class="auth-free-note">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Access to this course requires a <strong>free account</strong>. Use the <em>Create Account</em> tab to register — it only takes a minute.</span>
+    </div>
     <div class="auth-tabs">
       <div class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</div>
       <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Create Account</div>
     </div>
     <div id="form-signin">
-      <div class="field"><label>Email</label><input type="email" id="si-email" placeholder="you@nonprofit.org"></div>
-      <div class="field"><label>Password</label><input type="password" id="si-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+      <div class="field"><label>Email</label><input type="email" id="si-email" placeholder="you@organization.org" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+      <div class="field"><label>Password</label><input type="password" id="si-pass" placeholder="Password" onkeydown="if(event.key==='Enter')doSignIn()"></div>
       <button class="btn btn-primary" onclick="doSignIn()">Sign In</button>
-      <p class="auth-foot">Demo account: <b>demo@example.org</b> / <b>demo</b></p>
+      <div class="auth-side-links">
+        <a onclick="showAdminLogin()">Administrator Access</a>
+        <a onclick="switchAuthTab('signup')">Join a Team</a>
+      </div>
+      <div id="admin-login-panel" class="hidden" style="margin-top:1rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:1rem">
+        <div style="font-size:.85rem;font-weight:800;color:var(--navy);margin-bottom:.5rem">🔐 Administrator Access</div>
+        <div id="admin-setup-msg" class="hidden" style="font-size:.72rem;color:#1e40af;background:#EFF6FF;border:1px solid #BFDBFE;padding:.45rem .65rem;border-radius:6px;margin-bottom:.65rem">⚠️ First-time setup: create your admin password below.</div>
+        <div class="field"><label id="admin-pw-label">Admin Password</label><input type="password" id="admin-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
+        <div id="admin-pw2-wrap" class="hidden"><div class="field"><label>Confirm Password</label><input type="password" id="admin-pw2" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()"></div></div>
+        <button class="btn btn-primary" id="admin-btn" onclick="doAdminLogin()" style="margin-top:.4rem">Enter Admin Panel</button>
+        <a onclick="hideAdminLogin()" style="display:block;text-align:center;margin-top:.6rem;font-size:.75rem;color:#9ca3af;cursor:pointer">← Back to regular sign-in</a>
+      </div>
     </div>
     <div id="form-signup" class="hidden">
-      <div class="field"><label>Your Name</label><input type="text" id="su-name" placeholder="Pat Lee"></div>
-      <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="you@nonprofit.org"></div>
+      <div class="field"><label>Your Name</label><input type="text" id="su-name" placeholder="Pat Lee" onkeydown="if(event.key==='Enter')doSignUp()"></div>
+      <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="you@organization.org" onkeydown="if(event.key==='Enter')doSignUp()"></div>
       <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doSignUp()"></div>
-      <button class="btn btn-primary" onclick="doSignUp()">Create Account →</button>
-      <p class="auth-foot">By creating an account you agree this is a demo and no real data is stored remotely.</p>
+      <button class="btn btn-primary" onclick="doSignUp()">Create Account</button>
+    </div>
+    <div class="auth-guide-link">
+      <a href="Guide.html" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        View User Guide
+      </a>
     </div>
   </div>
 </div>
@@ -536,6 +573,45 @@ function switchAuthTab(which){
   document.getElementById('form-signin').classList.toggle('hidden', which!=='signin');
   document.getElementById('form-signup').classList.toggle('hidden', which!=='signup');
 }
+
+// ──── Admin-only sign-in (password only; no email required) ───────────────
+function getAdminHash(){ return localStorage.getItem('byc_volunteers_admin_hash') || ''; }
+function setAdminHash(h){ localStorage.setItem('byc_volunteers_admin_hash', h); }
+function showAdminLogin(){
+  document.getElementById('admin-login-panel').classList.remove('hidden');
+  const isSetup = !getAdminHash();
+  document.getElementById('admin-setup-msg').classList.toggle('hidden', !isSetup);
+  document.getElementById('admin-pw2-wrap').classList.toggle('hidden', !isSetup);
+  document.getElementById('admin-pw-label').textContent = isSetup ? 'Create Admin Password' : 'Admin Password';
+  document.getElementById('admin-btn').textContent = isSetup ? 'Create Admin Password' : 'Enter Admin Panel';
+  document.getElementById('admin-pw').value = '';
+  if (document.getElementById('admin-pw2')) document.getElementById('admin-pw2').value = '';
+  document.getElementById('admin-pw').focus();
+}
+function hideAdminLogin(){
+  document.getElementById('admin-login-panel').classList.add('hidden');
+}
+function doAdminLogin(){
+  const pw = document.getElementById('admin-pw').value;
+  if (!pw || pw.length < 6) { alert('Admin password must be at least 6 characters.'); return; }
+  const stored = getAdminHash();
+  if (!stored){
+    const pw2 = document.getElementById('admin-pw2').value;
+    if (pw !== pw2) { alert('Passwords do not match. Try again.'); return; }
+    setAdminHash(btoa(pw));
+    alert('Admin password created. You are now signed in as Administrator.');
+  } else {
+    if (btoa(pw) !== stored) { alert('Incorrect admin password.'); return; }
+  }
+  const adminEmail = 'admin@local';
+  state.users[adminEmail] = state.users[adminEmail] || { name: 'Administrator', password: '', teamId: null, isSuperAdmin: true };
+  state.users[adminEmail].isSuperAdmin = true;
+  state.currentEmail = adminEmail;
+  state.adminViewingTeam = null;
+  save();
+  routeAfterAuth();
+}
+
 function doSignIn(){
   const email = (document.getElementById('si-email').value || '').trim().toLowerCase();
   const pass = document.getElementById('si-pass').value;
@@ -1505,7 +1581,7 @@ function buildReportHTML(){
 
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${escapeHtml(orgName)} — Volunteer Report</title>
 <style>body{font-family:Georgia,serif;color:#1a1a2e;line-height:1.55;max-width:780px;margin:40px auto;padding:0 40px}h1{font-size:30px;color:#1B3A5C;border-bottom:3px solid #1B3A5C;padding-bottom:10px;margin-top:36px}h2{font-size:22px;color:#1B3A5C;margin-top:32px;border-bottom:1px solid #ccc;padding-bottom:6px}.cover{text-align:center;padding:60px 0;border-bottom:2px solid #1B3A5C;margin-bottom:50px}.cover h1{font-size:36px;border:none}.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}.kpi-card{background:#f0f4f8;padding:16px;border-radius:10px;text-align:center}.kpi-num{font-size:28px;font-weight:700;color:#1B3A5C}.kpi-lbl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:13px}.tbl th,.tbl td{padding:8px 10px;text-align:left;border-bottom:1px solid #e2e8f0}.tbl th{background:#f0f4f8;color:#1B3A5C;font-weight:700}@page{margin:1in}</style></head><body>
-<div class="cover"><h1>${escapeHtml(orgName)}</h1><div style="font-size:18px;color:#2A7B6F">VOLUNTEER REPORT</div><div style="margin-top:60px;color:#64748b;font-size:13px">Prepared ${today}</div></div>
+<div class="cover"><h1>${escapeHtml(orgName)}</h1><div style="font-size:18px;color:#2563EB">VOLUNTEER REPORT</div><div style="margin-top:60px;color:#64748b;font-size:13px">Prepared ${today}</div></div>
 
 <h1>By the Numbers</h1>
 <div class="kpi">
@@ -1569,7 +1645,7 @@ async function downloadReportDocx(){
   const PB = (l, v) => new Paragraph({ spacing:{after:60}, children:[new TextRun({text:l+' ',bold:true,size:22}),new TextRun({text:v||'—',size:22})] });
   const sections = [];
   sections.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{before:600,after:80}, children:[new TextRun({text:orgName,bold:true,size:48,color:'1B3A5C'})] }));
-  sections.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{after:120}, children:[new TextRun({text:'VOLUNTEER REPORT',size:28,color:'2A7B6F'})] }));
+  sections.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{after:120}, children:[new TextRun({text:'VOLUNTEER REPORT',size:28,color:'2563EB'})] }));
   sections.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{before:400}, children:[new TextRun({text:'Prepared '+today,size:20,color:'64748B'})] }));
   sections.push(new Paragraph({ children:[new PageBreak()] }));
   sections.push(H1('By the Numbers'));
