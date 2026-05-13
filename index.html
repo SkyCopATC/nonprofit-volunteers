@@ -773,8 +773,17 @@ function fmtDate(d){ if(!d) return '—'; try { return new Date(d).toLocaleDateS
 // Volunteers
 function volunteers(){ const t = teamData(); return t ? t.volunteers : []; }
 function getVolunteer(id){ const t = teamData(); if(!t) return null; return t.volunteers.find(v => v.id === id); }
-function createVolunteer(){ const t = teamData(); if(!t) return; t.volunteers.push({ id:newId('v-'), firstName:'', lastName:'', email:'', phone:'', emergencyName:'', emergencyPhone:'', skills:'', availability:'', interests:'', startDate:new Date().toISOString().slice(0,10), status:'pending', notes:'' }); save(); }
+function createVolunteer(){ const t = teamData(); if(!t) return; t.volunteers.push({ id:newId('v-'), firstName:'', lastName:'', email:'', phone:'', emergencyName:'', emergencyPhone:'', skills:'', availability:'', interests:'', startDate:new Date().toISOString().slice(0,10), status:'pending', notes:'', photoUrl:'', photoData:'' }); save(); }
 function updateVolunteer(id, patch){ const t = teamData(); if(!t) return; const v = t.volunteers.find(x => x.id === id); if(v){ Object.assign(v, patch); save(); } }
+
+function uploadVolunteerPhoto(id, input){
+  const file = input.files[0]; if(!file) return;
+  if (file.size > 500*1024 && !confirm('Image is larger than 500KB. Continue?')) return;
+  const reader = new FileReader();
+  reader.onload = e => { updateVolunteer(id, { photoData: e.target.result }); renderVolunteers(); };
+  reader.readAsDataURL(file);
+}
+
 function deleteVolunteer(id){ const t = teamData(); if(!t) return; t.volunteers = t.volunteers.filter(v => v.id !== id); save(); }
 function totalHoursForVolunteer(id){ const t = teamData(); return (t.hoursLog||[]).filter(h => h.volunteerId === id).reduce((s,h) => s + (parseFloat(h.hours)||0), 0); }
 
@@ -783,7 +792,7 @@ function applications(){ const t = teamData(); return t ? t.applications : []; }
 function createApplication(){ const t = teamData(); if(!t) return; t.applications.push({ id:newId('a-'), firstName:'', lastName:'', email:'', phone:'', interests:'', availability:'', referredBy:'', appliedDate:new Date().toISOString().slice(0,10), status:'received', notes:'' }); save(); }
 function updateApplication(id, patch){ const t = teamData(); if(!t) return; const a = t.applications.find(x => x.id === id); if(a){ Object.assign(a, patch); save(); } }
 function deleteApplication(id){ const t = teamData(); if(!t) return; t.applications = t.applications.filter(a => a.id !== id); save(); }
-function convertApplicationToVolunteer(appId){ const t = teamData(); if(!t) return; const a = t.applications.find(x => x.id === appId); if(!a) return; t.volunteers.push({ id:newId('v-'), firstName:a.firstName, lastName:a.lastName, email:a.email, phone:a.phone, emergencyName:'', emergencyPhone:'', skills:'', availability:a.availability, interests:a.interests, startDate:new Date().toISOString().slice(0,10), status:'pending', notes:'Converted from application '+a.appliedDate }); a.status = 'accepted'; save(); logHistory({type:'volunteer_added', itemName:'New volunteer: '+a.firstName+' '+a.lastName}); }
+function convertApplicationToVolunteer(appId){ const t = teamData(); if(!t) return; const a = t.applications.find(x => x.id === appId); if(!a) return; t.volunteers.push({ id:newId('v-'), firstName:a.firstName, lastName:a.lastName, email:a.email, phone:a.phone, emergencyName:'', emergencyPhone:'', skills:'', availability:a.availability, interests:a.interests, startDate:new Date().toISOString().slice(0,10), status:'pending', notes:'Converted from application '+a.appliedDate, photoUrl:'', photoData:'' }); a.status = 'accepted'; save(); logHistory({type:'volunteer_added', itemName:'New volunteer: '+a.firstName+' '+a.lastName}); }
 
 // Groups
 function groups(){ const t = teamData(); return t ? t.groups : []; }
@@ -995,6 +1004,11 @@ function renderVolunteers(){
         <div class="field"><label>Skills</label><input type="text" value="${escapeHtml(v.skills)}" oninput="updateVolunteer('${v.id}',{skills:this.value})" placeholder="Spanish-speaking, driver, food handler, marketing, etc."></div>
         <div class="field"><label>Availability</label><input type="text" value="${escapeHtml(v.availability)}" oninput="updateVolunteer('${v.id}',{availability:this.value})" placeholder="Saturdays + weekday evenings"></div>
         <div class="field"><label>Interests</label><input type="text" value="${escapeHtml(v.interests)}" oninput="updateVolunteer('${v.id}',{interests:this.value})"></div>
+        <div class="field"><label>Photo (optional)</label>
+          <input value="${escapeHtml(v.photoUrl||'')}" placeholder="Paste image URL OR upload below" oninput="updateVolunteer('${v.id}',{photoUrl:this.value})"/>
+          <input type="file" accept="image/*" style="margin-top:8px;font-size:13px" onchange="uploadVolunteerPhoto('${v.id}', this)"/>
+          ${v.photoData ? `<div style="margin-top:10px"><img src="${v.photoData}" style="max-width:160px;border-radius:8px;border:1px solid var(--border)"/><div><button class="btn btn-ghost" style="font-size:11px;margin-top:4px" onclick="updateVolunteer('${v.id}',{photoData:''}); renderVolunteers()">Remove uploaded image</button></div></div>` : (v.photoUrl ? `<div style="margin-top:10px"><img src="${escapeHtml(v.photoUrl)}" style="max-width:160px;border-radius:8px;border:1px solid var(--border)" onerror="this.style.display='none'"/></div>` : '')}
+        </div>
         <div class="field"><label>Notes</label><textarea oninput="updateVolunteer('${v.id}',{notes:this.value})" style="min-height:50px">${escapeHtml(v.notes)}</textarea></div>
       </div>`;
     }).join('') || '<div class="empty-state">No volunteers yet. Click + Add Volunteer.</div>'}
