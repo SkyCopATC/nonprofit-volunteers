@@ -522,11 +522,8 @@ function seedDemo(){
     state.users['member@example.org'] = { name: 'Demo Member', password: 'demo', teamId: tid, isSuperAdmin: false };
     state.teams[tid].members['member@example.org'] = 'member';
   }
-  // DEMO ADMIN SEED — change before sharing with users you don't trust.
-  // The 'admin' role only grants visibility into team counts within this browser; no remote access.
-  if (!state.users['skycopatc@yahoo.com']){
-    state.users['skycopatc@yahoo.com'] = { name: 'Steve (Admin)', password: 'change-me-in-settings', teamId: null, isSuperAdmin: true };
-  }
+  // First registered user automatically becomes super-admin for this browser.
+  // No email is hardcoded — keeps personal email out of the public source repo.
   save();
 }
 
@@ -563,7 +560,7 @@ function doSignUp(){
   if (!name || !email || !pass) { alert('All fields required'); return; }
   if (pass.length < 6) { alert('Password must be at least 6 characters'); return; }
   if (state.users[email]) { alert('Account already exists. Try signing in.'); return; }
-  state.users[email] = { name, password: pass, teamId: null, isSuperAdmin: false };
+  state.users[email] = { name, password: pass, teamId: null, isSuperAdmin: Object.keys(state.users).length === 0 };
   state.currentEmail = email;
   save();
   showTeamChoice();
@@ -1539,11 +1536,14 @@ function previewReport(){ const h = buildReportHTML(); if (!h) return; const w =
 function downloadReportHTML(){ const h = buildReportHTML(); if (!h) return; const n = (currentTeam().profile.orgName||'Volunteer_Report').replace(/[^a-z0-9]+/gi,'_'); const blob = new Blob([h],{type:'text/html'}); const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = n + '_Volunteer_Report.html'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),1000); }
 
 let docxLibLoaded = null;
+// SRI: paste sha384 hash for docx@8.5.0 to enable Subresource Integrity (see aaa_references/Documents/SRI-Hashes.html)
+const DOCX_LIB_INTEGRITY = 'sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb';
 function ensureDocxLib(){
   if (docxLibLoaded) return docxLibLoaded;
   docxLibLoaded = new Promise((resolve, reject) => {
     if (window.docx){ resolve(); return; }
     const s = document.createElement('script'); s.src = 'https://unpkg.com/docx@8.5.0/build/index.umd.min.js';
+    if (DOCX_LIB_INTEGRITY) { s.integrity = DOCX_LIB_INTEGRITY; s.crossOrigin = 'anonymous'; }
     s.onload = () => resolve(); s.onerror = () => { docxLibLoaded = null; reject(new Error('failed')); };
     document.head.appendChild(s);
   });
