@@ -522,8 +522,10 @@ function seedDemo(){
     state.users['member@example.org'] = { name: 'Demo Member', password: 'demo', teamId: tid, isSuperAdmin: false };
     state.teams[tid].members['member@example.org'] = 'member';
   }
+  // DEMO ADMIN SEED — change before sharing with users you don't trust.
+  // The 'admin' role only grants visibility into team counts within this browser; no remote access.
   if (!state.users['skycopatc@yahoo.com']){
-    state.users['skycopatc@yahoo.com'] = { name: 'Steve (Admin)', password: 'Buildyourclub', teamId: null, isSuperAdmin: true };
+    state.users['skycopatc@yahoo.com'] = { name: 'Steve (Admin)', password: 'change-me-in-settings', teamId: null, isSuperAdmin: true };
   }
   save();
 }
