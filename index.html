@@ -1537,7 +1537,7 @@ function downloadReportHTML(){ const h = buildReportHTML(); if (!h) return; cons
 
 let docxLibLoaded = null;
 // SRI: paste sha384 hash for docx@8.5.0 to enable Subresource Integrity (see aaa_references/Documents/SRI-Hashes.html)
-const DOCX_LIB_INTEGRITY = '';
+const DOCX_LIB_INTEGRITY = 'sha384-4xaIisuLEy2lo2HkB2C4rEf7v8jbTb2kuogX6TkuEt9feTWKBSFSOzsqNNbV+sKh';
 function ensureDocxLib(){
   if (docxLibLoaded) return docxLibLoaded;
   docxLibLoaded = new Promise((resolve, reject) => {
